@@ -256,7 +256,6 @@ urlpatterns = [
     path('newsletters/delete/<int:newsletter_id>/', views.delete_newsletter, name='delete_newsletter'),
     path("ask-us/<slug:service_slug>/", views.faq_page, name="faq_page"),
 
-    path('make-me-admin/', create_admin),
     # Utility
     path('ckeditor_upload/', views.ckeditor_upload, name='ckeditor_upload'),
     
