@@ -2,12 +2,16 @@ from django.db import models
 from django.utils.timezone import now
 from ckeditor.fields import RichTextField
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+
 
 class ContactModel(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     message = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.name if self.name else "Unnamed Contact"
@@ -75,6 +79,8 @@ class ProjectModel(models.Model):
     project_name = models.CharField(max_length=100, null=True, blank=True)
     website_link = models.CharField(max_length=200, null=True, blank=True)
     project_image = models.ImageField(upload_to='project_images/', null=True, blank=True)
+    created_date = models.DateTimeField(default=now)
+
     def __str__(self):
         return self.project_name
 
@@ -132,6 +138,11 @@ class Website(models.Model):
     image = models.ImageField(upload_to="website_images/", blank=True, null=True)
     created_date = models.DateTimeField(default=now, blank=True, null=True)
     add_description = models.TextField()
+    add_title = models.CharField(max_length=200, blank=True, null=True)
+    videos = models.TextField(blank=True, null=True, help_text="Add video URLs separated by commas or paste iframe embed codes")
+    main_title = models.CharField(max_length=200, blank=True, null=True)
+
+
 
     def save(self, *args, **kwargs):
         if not self.slug:  # Only generate slug if it's empty
@@ -149,41 +160,316 @@ class Website(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_public_url(self, request):
+        host = request.get_host()  # Real host + port
+        protocol = "https://" if request.is_secure() else "http://"
+        return f"{protocol}{host}/{self.category.slug}/{self.slug}/"
 
-class Service(models.Model):
-    website = models.ForeignKey(Website, on_delete=models.CASCADE, related_name="services")
-    heading = models.CharField(max_length=200, verbose_name="Service Heading")
-    description = models.TextField(verbose_name="Service Description")
+# class Service(models.Model):
+#     website = models.ForeignKey(Website, on_delete=models.CASCADE, related_name="services")
+#     heading = models.CharField(max_length=200, verbose_name="Service Heading")
+#     description = models.TextField(verbose_name="Service Description")
 
-    class Meta:
-        constraints = []  # ❌ Removed uniqueness constraint on (website, heading)
+#     class Meta:
+#         constraints = []  # ❌ Removed uniqueness constraint on (website, heading)
 
+#     def __str__(self):
+#         return f"{self.heading} - {self.website.name}"
+
+    
+class Services(models.Model):
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    description = models.TextField()
+    image = models.ImageField(upload_to="services/")
+    created_at = models.DateTimeField(auto_now_add=True)
+    meta_title = models.CharField(max_length=70, blank=True, null=True)
+    meta_description = models.CharField(max_length=160, blank=True, null=True)
+
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)  # Auto-generate slug from title
+        super().save(*args, **kwargs)
+        
+        
     def __str__(self):
-        return f"{self.heading} - {self.website.name}"
+        return self.name
 
 
 # Careeers
-class Career_Model(models.Model):    
+# class Career_Model(models.Model):    
+#     job_position = models.CharField(max_length=100)
+#     job_type = models.CharField(max_length=100)
+#     company_name = models.CharField(max_length=100)
+#     place = models.CharField(max_length=100)
+#     salary = models.IntegerField()
+#     job_details = RichTextField(max_length=20000)
+#     posted_date = models.DateField()
+#     end_date = models.DateField()
+#     post_end_date = models.DateTimeField()
+    
+#     def is_active(self):
+#         return self.post_end_date >= timezone.now()
+
+#careers
+class Career_Model(models.Model): 
+    
+    JOB_TYPES = (
+        ('full_time', 'Full Time'),
+        ('part_time', 'Part Time'),
+        ('internship', 'Internship'),
+        ('contract', 'Contract'),
+        ('remote', 'Remote'),
+    )   
     job_position = models.CharField(max_length=100)
-    job_type = models.CharField(max_length=100)
+    job_type = models.CharField(max_length=50, choices=JOB_TYPES)
     company_name = models.CharField(max_length=100)
     place = models.CharField(max_length=100)
     salary = models.IntegerField()
     job_details = RichTextField(max_length=20000)
-    posted_date = models.DateField()
-    end_date = models.DateField()
-    post_end_date = models.DateTimeField()
     
+    posted_date = models.DateField(auto_now_add=True)
+    end_date = models.DateField()
+    post_end_date = models.DateTimeField(null=True, blank=True)
+
+
     def is_active(self):
         return self.post_end_date >= timezone.now()
 
-# Cadidate
-class Candidate(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100, null=True, blank=True)
-    phone = models.CharField(max_length=20, blank=True, null=True)
-    pdf_file = models.FileField(upload_to='pdfs/')
-    job_position = models.ForeignKey(Career_Model, on_delete=models.CASCADE, related_name='candidates', null=True)
+    @property
+    def active(self):
+        return self.post_end_date and self.post_end_date >= timezone.now()
+
+# # Cadidate
+# class Candidate(models.Model):
+#     name = models.CharField(max_length=100)
+#     email = models.EmailField(max_length=100, null=True, blank=True)
+#     phone = models.CharField(max_length=20, blank=True, null=True)
+#     pdf_file = models.FileField(upload_to='pdfs/')
+#     job_position = models.ForeignKey(Career_Model, on_delete=models.CASCADE, related_name='candidates', null=True)
     
+#     def __str__(self):
+#         return self.name
+
+#candidate
+class Candidate(models.Model):
+    EXPERIENCE_CHOICES = [
+        ('0-1 years', '0 to 1 Year'),
+        ('1-3 years', '1 to 3 Years'),
+        ('3-5 years', '3 to 5 Years'),
+        ('5+ years', '5+ Years'),
+    ]
+
+    name = models.CharField(max_length=150)
+    email = models.EmailField(max_length=150, unique=True)
+    phone = models.CharField(max_length=20)
+    job_position = models.ForeignKey(
+        Career_Model,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='candidates'
+    )
+    experience = models.CharField(max_length=50, choices=EXPERIENCE_CHOICES)
+    linkedin_profile = models.URLField(max_length=255, blank=True, null=True)
+    portfolio_url = models.URLField(max_length=255, blank=True, null=True)
+    cover_letter = models.TextField(blank=True)
+    resume = models.FileField(upload_to='resumes/')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    
+
     def __str__(self):
         return self.name
+    
+
+    #New models which are not present in the old code 
+
+class Partner(models.Model):
+    name = models.CharField(max_length=150, unique=True)
+    logo = models.ImageField(upload_to='partners/')  # supports image uploads
+    description = models.TextField(max_length=300)
+
+    point1 = models.CharField(max_length=150)
+    point2 = models.CharField(max_length=150)
+    point3 = models.CharField(max_length=150)
+    point4 = models.CharField(max_length=150)
+    point5 = models.CharField(max_length=150)
+    point6 = models.CharField(max_length=150)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+    
+    
+class TrainService(models.Model):
+    """Service or category for training FAQs"""
+    name = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
+    meta_title = models.CharField(max_length=255, blank=True, null=True, help_text="SEO meta title")
+    meta_description = models.TextField(max_length=500, blank=True, null=True, help_text="SEO meta description")
+
+    class Meta:
+        verbose_name = "Train Service"
+        verbose_name_plural = "Train Services"
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+    
+class TrainFAQ(models.Model):
+    """FAQ linked to a specific Train Service"""
+    train_service = models.ForeignKey(TrainService, on_delete=models.CASCADE, related_name="faqs")
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Train FAQ'
+        verbose_name_plural = 'Train FAQs'
+
+    def __str__(self):
+        return self.question
+    
+    
+class Newsletter(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
+
+class ServiceOffer(models.Model):
+    service = models.ForeignKey(Services, related_name="offers", on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+
+    def __str__(self):
+        return f"{self.service.name} - {self.title}"
+
+
+class ServiceProcessStep(models.Model):
+    service = models.ForeignKey(Services, related_name="process_steps", on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    tagline = models.CharField(max_length=250)  # short single-line description
+
+    def clean(self):
+        if ServiceProcessStep.objects.filter(service=self.service).count() >= 4:
+            raise ValidationError("Each Service can have a maximum of 4 process steps.")
+
+    def __str__(self):
+        return f"{self.service.name} - Step: {self.title}"
+
+class ServiceFAQ(models.Model):
+    service = models.ForeignKey(Services, related_name="faqs", on_delete=models.CASCADE)
+    question = models.CharField(max_length=300)
+    answer = models.TextField()
+
+    def clean(self):
+        if ServiceFAQ.objects.filter(service=self.service).count() >= 6:
+            raise ValidationError("Each Service can have a maximum of 6 FAQs.")
+
+    def __str__(self):
+        return f"FAQ: {self.question}"
+
+
+from django.db import models
+from django.utils import timezone
+from django.core.validators import RegexValidator
+
+class PromotionalBanner(models.Model):
+    OCCASION_CHOICES = [
+        ('black_friday', 'Black Friday'),
+        ('christmas', 'Christmas'),
+        ('new_year', 'New Year'),
+        ('onam', 'Onam'),
+        ('eid', 'Eid'),
+        ('diwali', 'Diwali'),
+        ('easter', 'Easter'),
+        ('valentine', 'Valentine\'s Day'),
+        ('independence', 'Independence Day'),
+        ('custom', 'Custom Occasion'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    
+    # Basic Info
+    title = models.CharField(max_length=200, help_text="Main banner title")
+    subtitle = models.CharField(max_length=300, blank=True, help_text="Optional subtitle")
+    occasion = models.CharField(max_length=50, choices=OCCASION_CHOICES, default='custom')
+    custom_occasion = models.CharField(max_length=100, blank=True, help_text="If 'Custom Occasion' selected")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    
+    # Offer Details
+    discount_text = models.CharField(max_length=100, help_text="e.g., '80% OFF'")
+    offer_description = models.CharField(max_length=300, help_text="Brief offer description")
+    
+    # Timer Settings
+    show_timer = models.BooleanField(default=True, help_text="Show countdown timer")
+    end_date = models.DateTimeField(help_text="Offer expiration date & time")
+    
+    # Visual Customization
+    hex_validator = RegexValidator(regex='^#([A-Fa-f0-9]{6})$', message='Enter a valid hex color (e.g., #FF5733)')
+    background_color = models.CharField(max_length=7, default='#000000', validators=[hex_validator])
+    text_color = models.CharField(max_length=7, default='#FFFFFF', validators=[hex_validator])
+    accent_color = models.CharField(max_length=7, default='#9b59b6', validators=[hex_validator])
+    
+    # Call to Action
+    cta_text = models.CharField(max_length=100, default='Claim deal')
+    cta_link = models.URLField(help_text="Button destination URL")
+    
+    # Additional Info
+    additional_info = models.CharField(max_length=200, blank=True, help_text="Extra info (e.g., '30-day money-back guarantee')")
+    
+    # Priority
+    priority = models.IntegerField(default=0, help_text="Higher number = higher priority")
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-priority', '-created_at']
+        verbose_name = 'Promotional Banner'
+        verbose_name_plural = 'Promotional Banners'
+    
+    def __str__(self):
+        occasion_display = self.custom_occasion if self.occasion == 'custom' else self.get_occasion_display()
+        return f"{self.title} - {occasion_display}"
+    
+    def is_active(self):
+        """Check if banner should be displayed"""
+        if self.status != 'active':
+            return False
+        if self.end_date < timezone.now():
+            return False
+        return True
+    
+    def get_occasion_name(self):
+        """Get the display name for occasion"""
+        if self.occasion == 'custom':
+            return self.custom_occasion
+        return self.get_occasion_display()
+    
+    
+class FAQ(models.Model):
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+    created_date = models.DateTimeField(default=now)
+    def __str__(self):
+        return f"{self.category.title()} FAQ: {self.question}"
+    
+
+class WebsiteFAQ(models.Model):
+    website = models.ForeignKey(Website, on_delete=models.CASCADE, related_name='faqs')
+    question = models.CharField(max_length=200)
+    answer = models.TextField()
+
+    def __str__(self):
+        return f"FAQ for {self.website.website_name}: {self.question[:50]}"

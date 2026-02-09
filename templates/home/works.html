@@ -1,0 +1,379 @@
+
+{% extends "home/base.html" %}
+{% load static %}
+{% block content %}
+
+
+
+        <!-- tp-portfolio-area-start -->
+        {% comment %} <div class="tp-portfolio-masonary-spacing tp-portfolio-area pb-140">
+            <div class="container">
+                <div class="row align-items-end pb-120 pre-header">
+                    <div class="col-lg-8">
+                        <div class="tp-portfolio-title-wrap mb-105">
+                            <h2 class="tp-portfolio-sectitle tp-ff-heading text-uppercase d-flex align-items-center">
+                                Works <span class="borders ml-40"></span>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="tp-portfolio-para">
+                            <p class="fs-18 tp-text-grey-1 lh-28">
+                                We pride ourselves on delivering innovative, impactful, and results-driven projects that exceed expectations.
+                            </p>
+                            <div class="tp-portfolio-tag">
+                                <span>Dribbble</span>
+                                <span>Behance</span>
+                                <span>GitHub</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row gx-50">
+                    {% for p in projects %}
+                    <div class="col-lg-6">
+                        <div class="tp-portfolio-sa-item mb-50 not-hide-cursor portfolio__item" data-cursor="View<br>Demo">
+                            <div class="tp-portfolio-sa-thumb mb-25">
+                                <a href="{{ p.website_link }}" class="cursor-hide">
+                                    <img class="w-100 mover" src="{{ p.project_image.url }}" alt="{{ p.project_name }}">
+                                </a>
+                            </div>
+                            <div class="tp-portfolio-sa-content">
+                                <h4 class="tp-portfolio-sa-item-title fs-25 lh-1 mb-15">
+                                    <a class="underline-black" href="#">{{ p.project_name }}</a>
+                                </h4>
+                                <span class="tp-portfolio-sa-item-tag fw-700 fs-16 tp-text-grey-1 tp-ff-heading tp-bg-common-white-2 d-inline-block">
+                                    Development
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            
+            </div>
+        </div> {% endcomment %}
+
+        <style>
+    .tp-portfolio-sa-item {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tp-portfolio-sa-thumb {
+        border-radius: 20px;
+        overflow: hidden;
+        height: 450px;
+    }
+    
+    .tp-portfolio-sa-thumb img {
+        border-radius: 20px;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .tp-portfolio-sa-item:hover .tp-portfolio-sa-thumb img {
+        transform: scale(1.05);
+    }
+    
+    .tp-portfolio-sa-content {
+        position: absolute;
+        bottom: 25px;
+        left: 0;
+        right: 0;
+        padding: 0 25px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+    }
+    
+    .tp-portfolio-sa-item:hover .tp-portfolio-sa-content {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .tp-portfolio-sa-item-title a {
+        color: #fff;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .tp-portfolio-sa-item-tag {
+        background: rgba(255, 255, 255, 0.9) !important;
+        padding: 8px 16px;
+        border-radius: 20px;
+    }
+</style>
+
+<!-- tp-portfolio-area-start -->
+<div class="tp-portfolio-masonary-spacing tp-portfolio-area pb-140">
+    <div class="container">
+        <div class="row align-items-end pb-120 pre-header">
+            <div class="col-lg-8">
+                <div class="tp-portfolio-title-wrap mb-105">
+                    <h2 class="tp-portfolio-sectitle tp-ff-heading text-uppercase d-flex align-items-center">
+                        Works <span class="borders ml-40"></span>
+                    </h2>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                {% comment %} <div class="tp-portfolio-para">
+                    <p class="fs-18 tp-text-grey-1 lh-28">
+                        We pride ourselves on delivering innovative, impactful, and results-driven projects that exceed expectations.
+                    </p>
+                    <div class="tp-portfolio-tag">
+                        <span>Dribbble</span>
+                        <span>Behance</span>
+                        <span>GitHub</span>
+                    </div>
+                </div> {% endcomment %}
+                <div class="tp-portfolio-simple text-center">
+    <p class="fs-18 tp-text-grey-1 lh-28 mb-3" style="color:black;">
+        We pride ourselves on delivering innovative, impactful, and results-driven projects that exceed expectations.
+    </p>
+    <div class="tp-portfolio-icons">
+       
+       
+        <i class="fab fa-node-js" title="Node.js"></i>
+        <i class="fab fa-python" title="Python/Django"></i>
+        <i class="fab fa-github" title="GitHub"></i>
+        <i class="fab fa-js-square" title="JavaScript"></i>
+        <i class="fab fa-html5" title="HTML5"></i>
+        <i class="fab fa-css3-alt" title="CSS3"></i>
+    </div>
+</div>
+            </div>
+        </div>
+
+        <style>
+.tp-portfolio-icons {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 10px;
+}
+
+.tp-portfolio-icons i {
+    color: #001f3f; /* dark navy */
+    font-size: 28px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.tp-portfolio-icons i:hover {
+    color: #00145bff; /* hover cyan */
+    transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+    .tp-portfolio-icons i {
+        font-size: 24px;
+    }
+}
+</style>
+        
+        <div class="row gx-50">
+            {% for p in projects %}
+            <div class="col-lg-6">
+                <div class="tp-portfolio-sa-item mb-50 not-hide-cursor portfolio__item" data-cursor="View<br>Demo">
+                    <div class="tp-portfolio-sa-thumb mb-25">
+                        <a href="{{ p.website_link }}" class="cursor-hide">
+                            <img class="w-100 mover" src="{{ p.project_image.url }}" alt="{{ p.project_name }}">
+                        </a>
+                    </div>
+                    <div class="tp-portfolio-sa-content">
+                        <h4 class="tp-portfolio-sa-item-title fs-25 lh-1 mb-15">
+                            <a class="underline-black" href="#">{{ p.project_name }}</a>
+                        </h4>
+                        {% comment %} <span class="tp-portfolio-sa-item-tag fw-700 fs-16 tp-text-grey-1 tp-ff-heading tp-bg-common-white-2 d-inline-block">
+                            Development
+                        </span> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if projects.paginator.count > 4 %}
+<div class="pagination-wrapper d-flex justify-content-center align-items-center mt-4">
+
+    {% if projects.has_previous %}
+    <a href="?page={{ projects.previous_page_number }}" class="pagination-btn prev-btn">
+        <svg width="22" height="10" viewBox="0 0 25 10">
+            <path d="M6.32 9.91L0.28 5.63..." fill="currentColor"/>
+        </svg>
+        Previous
+    </a>
+    {% endif %}
+
+    <ul class="pagination-numbers list-unstyled d-flex mx-3">
+        {% for num in projects.paginator.page_range %}
+        <li>
+            <a href="?page={{ num }}" class="pagination-number {% if projects.number == num %}active{% endif %}">
+                {{ num }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if projects.has_next %}
+    <a href="?page={{ projects.next_page_number }}" class="pagination-btn next-btn">
+        Next
+        <svg width="22" height="10" viewBox="0 0 25 10">
+            <path d="M18.67 9.91L24.72..." fill="currentColor"/>
+        </svg>
+    </a>
+    {% endif %}
+
+</div>
+{% endif %}
+
+    
+    </div>
+</div>
+
+
+
+
+<style>
+   /* Wrapper */
+.pagination-wrapper a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+}
+
+/* Prev & Next Buttons */
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: 1px solid #000;
+    transition: all .25s ease;
+}
+
+.pagination-btn:hover {
+    background: #000;
+    color: #fff;
+}
+
+/* Page Numbers */
+.pagination-numbers li {
+    margin: 0 6px;
+}
+
+.pagination-number {
+    display: block;
+    padding: 8px 14px;
+    border-radius: 6px;
+    background: #fff;
+    color: #000;
+    border: 1px solid #000;
+    transition: all .25s ease;
+}
+
+.pagination-number:hover {
+    background: #000;
+    color: #fff;
+}
+
+/* Current Active Page */
+.pagination-number.active {
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+}
+
+</style>
+
+
+
+
+<style>
+/* Keep exactly 2 items per row but make them slightly wider */
+.col-lg-6 {
+    flex: 0 0 calc(50% - 20px);   /* stays two-per-row, slightly wider */
+    max-width: calc(50% - 20px);
+}
+
+/* Reduce horizontal gap properly */
+.row.gx-50 {
+    --bs-gutter-x: 30px;  /* smaller gap */
+}
+
+/* Reduce gap under each card */
+.tp-portfolio-sa-item {
+    margin-bottom: 30px;
+}
+
+/* Reduce gap between image and text */
+.tp-portfolio-sa-thumb {
+    margin-bottom: 15px;
+}
+</style>
+
+
+<style>
+    /* Desktop - 2 per row */
+.col-lg-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+/* Tablet - 2 per row with spacing */
+@media (max-width: 992px) {
+    .col-lg-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding: 10px;
+    }
+
+    .tp-portfolio-sa-thumb {
+        height: 350px;
+    }
+}
+
+/* Mobile - full width */
+@media (max-width: 768px) {
+    .col-lg-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .tp-portfolio-sa-thumb {
+        height: 250px; /* reduce height for mobile so image doesn't cut */
+    }
+
+    .tp-portfolio-sa-content {
+        padding: 0 15px;
+    }
+
+    .tp-portfolio-sectitle {
+        font-size: 28px;
+    }
+}
+
+/* Extra small phones */
+@media (max-width: 480px) {
+    .tp-portfolio-sa-thumb {
+        height: 200px;
+    }
+}
+@media (max-width: 768px) {
+    .tp-portfolio-sa-content {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+}
+
+</style>
+
+{% endblock %}
+
+
+

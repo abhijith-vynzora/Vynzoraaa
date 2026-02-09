@@ -41,13 +41,23 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'vynzora_app',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 SITE_ID = 1
 SITE_DOMAIN = "https://vynzora.com"
 
 
-
+# CKEditor Configuration
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': '100%',
+    }
+}
 
 
 MIDDLEWARE = [

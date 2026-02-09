@@ -6,72 +6,232 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 import random
 from django.utils import timezone
-
-
-from .models import ContactModel, ClientReview, Client_Logo, Technologies, Blog, Team, ProjectModel, Certificates, Category, Website, Service, Career_Model, Candidate
+from django.views.decorators.http import require_http_methods
+from .models import ContactModel, ClientReview, Client_Logo, Technologies, Blog, Team, ProjectModel, Certificates, Category, Website, Career_Model, Candidate
 from .forms import ContactModelForm, ClientReviewForm, Client_Logo_Form, TechnologiesForm, BlogForm, TeamForm, ProjectModelForm, CertificatesForm, CategoryForm, WebsiteForm, CareerForm, CandidateForm
+from .models import Services,Partner
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_http_methods
+import json
+from .models import Newsletter
+from .models import TrainService, TrainFAQ
+from django.db.models import Count
+from django.template.loader import render_to_string
+from .forms import PartnerForm
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.sessions.models import Session
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.utils import timezone
+from django.core.paginator import Paginator
+from django.db import transaction
+from .models import ServiceOffer, ServiceProcessStep, ServiceFAQ
+
+# def index(request):
+#     technologies = Technologies.objects.all()
+#     client_logos = Client_Logo.objects.all()
+#     reviews = ClientReview.objects.all() 
+#     projects = list(ProjectModel.objects.all())  # Convert QuerySet to list
+#     random.shuffle(projects)  # Shuffle the list
+#     projects = projects[:6] 
+
+#     if request.method == 'POST':
+#         id1 = request.POST.get('id1')
+#         pdf_url = generate_certificate_url(id1)
+#         if pdf_url:
+#             messages.success(request, "Your certificate has been successfully generated!")
+#             return render(request, 'certificate.html', {'pdf_url': pdf_url})
+#         else:
+#             messages.error(request, "Oops! No certificate found for the provided ID. Please try again.")
+#             return redirect('index')
+#     return render(request, 'index.html',{'technologies': technologies, 'client_logos' : client_logos, 'reviews':reviews,'projects': projects})
 
 
 def index(request):
     technologies = Technologies.objects.all()
-    client_logos = Client_Logo.objects.all()
+    # client_logos = Client_Logo.objects.all()
     reviews = ClientReview.objects.all() 
-    projects = list(ProjectModel.objects.all())  # Convert QuerySet to list
-    random.shuffle(projects)  # Shuffle the list
-    projects = projects[:6] 
+    # projects = list(ProjectModel.objects.all())  # Convert QuerySet to list
+    # random.shuffle(projects)  # Shuffle the list
+    # projects = projects[:6] 
+    cat = Category.objects.all()
+    projects = ProjectModel.objects.all()
+    blogs = Blog.objects.all()[:3]
+    services = Services.objects.all()   
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+    active_banner = PromotionalBanner.objects.filter(
+        status='active',
+        end_date__gte=timezone.now()
+    ).first()
+   
 
     if request.method == 'POST':
         id1 = request.POST.get('id1')
-        pdf_url = generate_certificate_url(id1)
+        pdf_url = verify_certificate(id1)
         if pdf_url:
             messages.success(request, "Your certificate has been successfully generated!")
-            return render(request, 'certificate.html', {'pdf_url': pdf_url})
+            return render(request, 'home/certificate.html', {'pdf_url': pdf_url})
         else:
             messages.error(request, "Oops! No certificate found for the provided ID. Please try again.")
             return redirect('index')
-    return render(request, 'index.html',{'technologies': technologies, 'client_logos' : client_logos, 'reviews':reviews,'projects': projects})
+        
+        
+    # return render(request, 'index.html',{ 'client_logos' : client_logos, 'reviews':reviews,'projects': projects})
+    return render(request, 'home/index.html',{'active_banner': active_banner,'cat':cat,'technologies':technologies,'projects':projects,'reviews':reviews,'blogs':blogs,'services':services,'career_job_count': active_jobs})
+
+
+def verify_certificate(request):
+    footer_services = Services.objects.order_by("?")[:4]
+    services = Services.objects.all()
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+    
+    previous_url = request.META.get('HTTP_REFERER') or '/'
+    
+    if request.method == 'POST':
+        id1 = request.POST.get('id1')
+        try:
+            certificate = Certificates.objects.get(id1=id1)
+            pdf_url = f'{settings.MEDIA_URL}{certificate.pdf_file}'
+            messages.success(request, f"Certificate verified successfully for ID: {id1}")
+            return render(request, 'home/certificate.html', {
+                'pdf_url': pdf_url,
+                'certificate': certificate,
+                'services':services,
+                'footer_services':footer_services,
+                'career_job_count': active_jobs
+            
+            })
+        except Certificates.DoesNotExist:
+            messages.error(request, f"No certificate found with ID: {id1}. Please check and try again.")
+            return redirect(previous_url)
+    
+    return redirect(previous_url)
 
 def index_redirect(request):
     return redirect('index')
 
-def generate_certificate_url(id):
-    try:
-        certificate = Certificates.objects.get(id1=id)
-        return f'{settings.MEDIA_URL}{certificate.pdf_file}'
-    except Certificates.DoesNotExist:
-        return None
+def index_team(request):
+    team_members = Team.objects.all()
+    services = Services.objects.all()   
+    footer_services = Services.objects.order_by("?")[:4]
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+    
+    return render(request, 'home/team.html', {'team_members': team_members,'services':services,'footer_services':footer_services,'career_job_count': active_jobs})
+
+# def generate_certificate_url(id):
+#     try:
+#         certificate = Certificates.objects.get(id1=id)
+#         return f'{settings.MEDIA_URL}{certificate.pdf_file}'
+#     except Certificates.DoesNotExist:
+#         return None
+
+# def about(request):
+#     technologies = Technologies.objects.all()
+#     client_logos = Client_Logo.objects.all()
+#     team_members = Team.objects.all()
+#     if request.method == 'POST':
+#         id1 = request.POST.get('id1')
+#         pdf_url = generate_certificate_url(id1)
+#         if pdf_url:
+#             return render(request, 'certificate.html', {'pdf_url': pdf_url})
+#         else:
+#             messages.error(request, ("Certificate not found for the provided ID!!!"))
+#             return redirect('about')
+#     return render(request, 'about.html',{'technologies': technologies, 'client_logos' : client_logos, 'team_members':team_members})
 
 def about(request):
     technologies = Technologies.objects.all()
     client_logos = Client_Logo.objects.all()
-    team_members = Team.objects.all()
-    if request.method == 'POST':
-        id1 = request.POST.get('id1')
-        pdf_url = generate_certificate_url(id1)
-        if pdf_url:
-            return render(request, 'certificate.html', {'pdf_url': pdf_url})
-        else:
-            messages.error(request, ("Certificate not found for the provided ID!!!"))
-            return redirect('about')
-    return render(request, 'about.html',{'technologies': technologies, 'client_logos' : client_logos, 'team_members':team_members})
+    services = Services.objects.all()   
+    footer_services = Services.objects.order_by("?")[:4]
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+    reviews = ClientReview.objects.all() 
+    
+    # team_members = Team.objects.all()
+    # if request.method == 'POST':
+    #     id1 = request.POST.get('id1')
+    #     pdf_url = generate_certificate_url(id1)
+    #     if pdf_url:
+    #         return render(request, 'certificate.html', {'pdf_url': pdf_url})
+    #     else:
+    #         messages.error(request, ("Certificate not found for the provided ID!!!"))
+    #         return redirect('about')
+    # return render(request, 'about.html',{'technologies': technologies, 'client_logos' : client_logos, 'team_members':team_members})
+    return render(request,'home/about.html',{'reviews':reviews,'technologies': technologies,'client_logos': client_logos,'services':services,'footer_services':footer_services,'career_job_count': active_jobs})
+
+# def contact(request):
+#     if request.method == 'POST':
+#         form = ContactModelForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Your message has been successfully submitted.')
+#             return redirect('contact')
+#         else:
+#             messages.error(request, "Oops! Please try again.")
+#             return redirect('contact')
+#     else:
+#         form = ContactModelForm()
+#     return render(request, 'contact.html', {'form': form})
 
 def contact(request):
+    
+    services = Services.objects.all()   
+    footer_services = Services.objects.order_by("?")[:4]
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+    
     if request.method == 'POST':
         form = ContactModelForm(request.POST)
+        
+        
+        # Check if it's an AJAX request
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your message has been successfully submitted.')
-            return redirect('contact')
+            
+            if is_ajax:
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Your message has been successfully submitted.'
+                })
+            else:
+                messages.success(request, 'Your message has been successfully submitted.')
+                return redirect('contact')
         else:
-            messages.error(request, "Oops! Please try again.")
-            return redirect('contact')
+            if is_ajax:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Oops! Please check your form and try again.',
+                    'errors': form.errors
+                }, status=400)
+            else:
+                messages.error(request, "Oops! Please try again.")
+                return redirect('contact')
     else:
         form = ContactModelForm()
-    return render(request, 'contact.html', {'form': form})
+    
+    return render(request, 'home/contact.html', {'form': form,'services':services,'footer_services':footer_services,'career_job_count': active_jobs})
+
+
+
+# def portfolio(request):
+#     projects = ProjectModel.objects.all()
+#     return render(request,'portfolio.html', {'projects':projects})
 
 def portfolio(request):
     projects = ProjectModel.objects.all()
-    return render(request,'portfolio.html', {'projects':projects})
+    services = Services.objects.all()   
+    footer_services = Services.objects.order_by("?")[:4]
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+    
+    paginator = Paginator(projects, 4)  # Show 4 projects per page
+    page_number = request.GET.get('page')
+    projects = paginator.get_page(page_number)
+
+    # return render(request,'portfolio.html', {'projects':projects})
+    return render(request,'home/works.html',{'projects':projects,'services':services,'footer_services':footer_services,'career_job_count': active_jobs})
 
 def advertising(request):
     return render(request, 'advertising.html')
@@ -91,104 +251,410 @@ def branding(request):
 def it_solutions(request):
     return render(request, 'it_solutions.html')
 
-def terms_and_conditions(request):
-    return render(request, 'terms_and_conditions.html')
+# def terms_and_conditions(request):
+#     return render(request, 'terms_and_conditions.html')
 
-def privacy_and_policy(request):
-    return render(request, 'privacy_and_policy.html')
 
-def careers(request):
-    careers = Career_Model.objects.filter(post_end_date__gte=timezone.now())  # Fetch active jobs
-    return render(request, 'careers.html', {'careers': careers})
+def terms_condition(request):
 
-def submit_application(request):
-    job_positions = Career_Model.objects.all()
+    services = Services.objects.all()
+    footer_services = Services.objects.order_by("?")[:4]
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+
+    if request.method == 'POST':
+        form = ContactModelForm(request.POST)
+
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
+        if form.is_valid():
+            form.save()
+
+            if is_ajax:
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Your message has been successfully submitted.'
+                })
+            else:
+                messages.success(request, 'Your message has been successfully submitted.')
+                return redirect('terms_condition')
+        else:
+            if is_ajax:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Oops! Please check your form and try again.',
+                    'errors': form.errors
+                }, status=400)
+            else:
+                messages.error(request, "Oops! Please try again.")
+                return redirect('terms_condition')
+
+    else:
+        form = ContactModelForm()
+
+    return render(request, 'home/terms_condition.html', {
+        'form': form,
+        'services': services,
+        'footer_services': footer_services,
+        'career_job_count': active_jobs,
+    })
+
+# def privacy_and_policy(request):
+#     return render(request, 'privacy_and_policy.html')
+
+
+def privacy_policy(request):
+
+    services = Services.objects.all()
+    footer_services = Services.objects.order_by("?")[:4]
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+
+    if request.method == 'POST':
+        form = ContactModelForm(request.POST)
+
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
+        if form.is_valid():
+            form.save()
+
+            if is_ajax:
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Your message has been successfully submitted.'
+                })
+            else:
+                messages.success(request, 'Your message has been successfully submitted.')
+                return redirect('privacy_policy')
+        else:
+            if is_ajax:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Oops! Please check your form and try again.',
+                    'errors': form.errors
+                }, status=400)
+            else:
+                messages.error(request, "Oops! Please try again.")
+                return redirect('privacy_policy')
+
+    else:
+        form = ContactModelForm()
+
+    return render(request, 'home/privacy_policy.html', {
+        'form': form,
+        'services': services,
+        'footer_services': footer_services,
+        'career_job_count': active_jobs,
+    })
+
+# def careers(request):
+#     careers = Career_Model.objects.filter(post_end_date__gte=timezone.now())  # Fetch active jobs
+#     return render(request, 'careers.html', {'careers': careers})
+
+# def submit_application(request):
+#     job_positions = Career_Model.objects.all()
+#     if request.method == 'POST':
+#         form = CandidateForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Your application has been successfully submitted.')
+#             return redirect('careers')  # Redirect after successful submission
+#         else:
+#             messages.error(request, "Oops! Please try again.")
+#             return redirect('careers')
+#     else:
+#         form = CandidateForm()
+
+#     return render(request, 'careers.html', {'form': form, 'job_positions':job_positions})
+
+def career_submit_application(request):
+    # Get active job positions
+    job_positions = Career_Model.objects.filter(post_end_date__gte=timezone.now())
+    careers = Career_Model.objects.filter(post_end_date__gte=timezone.now())
+    services = Services.objects.all()  
+    footer_services = Services.objects.order_by("?")[:4]
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+    
     if request.method == 'POST':
         form = CandidateForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your application has been successfully submitted.')
-            return redirect('careers')  # Redirect after successful submission
+            return redirect('submit_application')  # Make sure 'careers' is a valid URL name
         else:
-            messages.error(request, "Oops! Please try again.")
-            return redirect('careers')
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = CandidateForm()
 
-    return render(request, 'careers.html', {'form': form, 'job_positions':job_positions})
+    context = {
+        'form': form,
+        'job_positions': job_positions,
+        'careers': careers,
+        'services':services,
+        'footer_services':footer_services,
+        'career_job_count': active_jobs
+    }
+    return render(request, 'home/careers.html', context)
+
+# def blog(request):
+#     blogs = Blog.objects.all().order_by('-created_date')
+#     return render(request, 'blog.html', {'blogs': blogs})
 
 def blog(request):
+    # blogs = Blog.objects.all().order_by('-created_date')
+    # return render(request, 'blog.html', {'blogs': blogs})
     blogs = Blog.objects.all().order_by('-created_date')
-    return render(request, 'blog.html', {'blogs': blogs})
+    services = Services.objects.all() 
+    paginator = Paginator(blogs, 6)  # Show 6 blogs per page
+    footer_services = Services.objects.order_by("?")[:4]
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+
+    page_number = request.GET.get('page')
+    blogs = paginator.get_page(page_number)
+    return render(request,'home/blog.html',{'blogs':blogs,'services':services, 'footer_services':footer_services,'career_job_count': active_jobs})
+
+# def blog_details(request, slug):  
+#     blog = get_object_or_404(Blog, slug=slug)  # Get blog by slug
+#     recent_posts = Blog.objects.exclude(id=blog.id).order_by('-created_date')[:6]  # Use blog.id instead of blog_id
+#     return render(request, 'blog_details.html', {'blog': blog, 'recent_posts': recent_posts})
 
 def blog_details(request, slug):  
     blog = get_object_or_404(Blog, slug=slug)  # Get blog by slug
-    recent_posts = Blog.objects.exclude(id=blog.id).order_by('-created_date')[:6]  # Use blog.id instead of blog_id
-    return render(request, 'blog_details.html', {'blog': blog, 'recent_posts': recent_posts})
+    services = Services.objects.all() 
+    recent_posts = Blog.objects.exclude(id=blog.id).order_by('-created_date')[:4]  # Use blog.id instead of blog_id
+    footer_services = Services.objects.order_by("?")[:4]
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+    
+    return render(request, 'home/blog_details.html', {'blog': blog,'recent_posts':recent_posts, 'services':services,'footer_services':footer_services,'career_job_count': active_jobs})
 
 
 # Admin Side
+# @csrf_protect
+# def user_login(request):
+#     if request.method == "POST":
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(request, username=username, password=password)
+#         if user is not None:
+#             login(request, user)
+#             messages.success(request, f"Welcome back, Admin!")
+#             return redirect('dashboard')
+#         else:   
+#             messages.error(request, "There was an error logging in, try again.")
+#             return redirect('user_login')
+#     return render(request, 'authenticate/login.html')
+
 @csrf_protect
+@never_cache  # Prevent browser caching
 def user_login(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')  # Prevent logged-in users from accessing login page
+    
     if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
+        
         if user is not None:
             login(request, user)
-            messages.success(request, f"Welcome back, Admin!")
+            messages.success(request, f"Welcome back, {user.username}!")
             return redirect('dashboard')
         else:   
-            messages.error(request, "There was an error logging in, try again.")
+            messages.error(request, "Invalid username or password.")
             return redirect('user_login')
-    return render(request, 'authenticate/login.html')
+    
+    return render(request, 'home/login.html')
 
+
+# def logout_user(request):
+#     logout(request)
+#     messages.success(request, ("You Were Logged Out"))
+#     return redirect('user_login')
 
 def logout_user(request):
-    logout(request)
-    messages.success(request, ("You Were Logged Out"))
+    # Delete all sessions for this user (logs out from all tabs)
+    if request.user.is_authenticated:
+        Session.objects.filter(expire_date__gte=timezone.now(), session_key__in=[
+            s.session_key for s in Session.objects.all() if request.user.id == int(s.get_decoded().get('_auth_user_id', 0))
+        ]).delete()
+    
+    logout(request)  # Log out current session
+    messages.success(request, "You have been logged out successfully.")
     return redirect('user_login')
 
+from .models import (
+    ProjectModel, Team, Technologies, Blog, Certificates, ClientReview,
+    ContactModel, Website, Career_Model, Candidate
+)
+from django.db.models import Q
 
-#  dashboard
+# #  dashboard
+# @login_required(login_url='user_login')
+# def dashboard(request):
+#     return render(request,'admin_pages/dashboard.html')
+
+
 @login_required(login_url='user_login')
+@never_cache
 def dashboard(request):
-    return render(request,'admin_pages/dashboard.html')
+    # Counts
+    active_projects_count = ProjectModel.objects.count()
+    team_members_count = Team.objects.count()
+    total_technologies = Technologies.objects.count()
+    total_applications = Candidate.objects.count()
+    pending_applications = Candidate.objects.filter(job_position__end_date__gte=timezone.now()).count()
+    websites_built = Website.objects.count()
+    certifications_count = Certificates.objects.count()
+    blog_posts_count = Blog.objects.count()
+    client_reviews_count = ClientReview.objects.count()
+
+    # Project chart data (monthly completed projects)
+    # Simple example: count projects by month of created_date
+    from django.db.models.functions import TruncMonth
+    from django.db.models import Count
+
+    projects_by_month = (
+    ProjectModel.objects
+    .annotate(month=TruncMonth('created_date'))  # <-- Use created_date instead of id
+    .values('month')
+    .annotate(count=Count('id'))
+    .order_by('month') )
+    labels = [p['month'].strftime('%b %Y') if p['month'] else "Unknown" for p in projects_by_month]
+    data = [p['count'] for p in projects_by_month]
+    project_chart_data = {"labels": labels, "data": data}
+
+    # Average rating for client satisfaction
+    reviews = ClientReview.objects.all()
+    average_rating = round(sum([5 for r in reviews]) / len(reviews), 1) if reviews else 0  # You can store numeric rating field
+    satisfaction_offset = 283 - (average_rating / 5 * 283)
+
+    # Rating stats (fake example, you can calculate based on actual numeric rating field)
+    rating_stats = [
+        {'stars': 5, 'bar_class': 'bg-success', 'percent': 60},
+        {'stars': 4, 'bar_class': 'bg-info', 'percent': 25},
+        {'stars': 3, 'bar_class': 'bg-warning', 'percent': 10},
+        {'stars': 2, 'bar_class': 'bg-danger', 'percent': 3},
+        {'stars': 1, 'bar_class': 'bg-dark', 'percent': 2},
+    ]
+
+    # Recent Activities (from Projects, Teams, Blogs)
+    recent_activities = []
+
+    for p in ProjectModel.objects.order_by('-id')[:5]:
+        recent_activities.append({
+            'title': f"Project Added: {p.project_name}",
+            'description': getattr(p, 'project_name', 'No description'),
+            'icon': "mdi mdi-briefcase-outline",
+            'status_class': "primary",
+            'time_ago': "Recently"
+        })
+
+    for t in Team.objects.order_by('-id')[:3]:
+        recent_activities.append({
+            'title': f"Team Member Added: {t.client_name}",
+            'description': getattr(t, 'designation', ''),
+            'icon': "mdi mdi-account-multiple",
+            'status_class': "success",
+            'time_ago': "Recently"
+        })
+
+    for b in Blog.objects.order_by('-id')[:3]:
+        recent_activities.append({
+            'title': f"Blog Published: {b.name}",
+            'description': b.description[:80],
+            'icon': "mdi mdi-post",
+            'status_class': "warning",
+            'time_ago': "Recently"
+        })
+
+    context = {
+        "active_projects_count": active_projects_count,
+        "team_members_count": team_members_count,
+        "total_technologies": total_technologies,
+        "total_applications": total_applications,
+        "pending_applications": pending_applications,
+        "websites_built": websites_built,
+        "certifications_count": certifications_count,
+        "blog_posts_count": blog_posts_count,
+        "client_reviews_count": client_reviews_count,
+        "project_chart_data": project_chart_data,
+        "selected_period": "Last 6 Months",
+        "average_rating": average_rating,
+        "satisfaction_offset": satisfaction_offset,
+        "rating_stats": rating_stats,
+        "recent_activities": recent_activities,
+    }
+
+    return render(request, "admin_home/index.html", context)
 
 
 # Contact 
 @login_required(login_url='user_login')
 def contact_view(request):
     contacts = ContactModel.objects.all().order_by('-id')
-    return render(request,'admin_pages/contact_view.html',{'contacts':contacts})
+    return render(request,'admin_home/contact_view.html',{'contacts':contacts})
 
+
+# @login_required(login_url='user_login')
+# def delete_contact(request,id):
+#     contact = ContactModel.objects.get(id=id)
+#     contact.delete()
+#     return redirect('contact_view')
 
 @login_required(login_url='user_login')
 def delete_contact(request,id):
     contact = ContactModel.objects.get(id=id)
     contact.delete()
+    messages.success(request,'Contact message deleted successfully!')
     return redirect('contact_view')
 
 
+# # Client Reviews
+# @login_required(login_url='user_login')
+# def add_client_review(request):
+#     if request.method == 'POST':
+#         form = ClientReviewForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('view_client_reviews') 
+#     else:
+#         form = ClientReviewForm()
+
+#     return render(request, 'admin_pages/add_client_review.html', {'form': form})
+
 # Client Reviews
 @login_required(login_url='user_login')
+@never_cache
 def add_client_review(request):
     if request.method == 'POST':
         form = ClientReviewForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('view_client_reviews') 
+            messages.success(request, 'Client review added successfully!')
+            return redirect('view_client_reviews')
+        else:
+            messages.error(request, 'Error adding client review. please try again.')
     else:
         form = ClientReviewForm()
 
-    return render(request, 'admin_pages/add_client_review.html', {'form': form})
+    return render(request, 'admin_home/add_client_review.html', {'form': form})
 
 
 @login_required(login_url='user_login')
 def view_client_reviews(request):
     client_reviews = ClientReview.objects.all().order_by('-id')
-    return render(request, 'admin_pages/view_client_reviews.html', {'client_reviews': client_reviews})
+    return render(request, 'admin_home/view_client_reviews.html', {'client_reviews': client_reviews})
 
+
+# @login_required(login_url='user_login')
+# def update_client_review(request, id):
+#     client_reviews = get_object_or_404(ClientReview, id=id)
+#     if request.method == 'POST':
+#         form = ClientReviewForm(request.POST, request.FILES, instance=client_reviews)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('view_client_reviews')
+#     else:
+#         form = ClientReviewForm(instance=client_reviews)
+#     return render(request, 'admin_pages/update_client_review.html', {'form': form, 'client_reviews': client_reviews})
 
 @login_required(login_url='user_login')
 def update_client_review(request, id):
@@ -197,10 +663,13 @@ def update_client_review(request, id):
         form = ClientReviewForm(request.POST, request.FILES, instance=client_reviews)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Client review added successfully!')
             return redirect('view_client_reviews')
+        else:
+            messages.error(request, 'Error adding client review. please try again.')
     else:
         form = ClientReviewForm(instance=client_reviews)
-    return render(request, 'admin_pages/update_client_review.html', {'form': form, 'client_reviews': client_reviews})
+    return render(request, 'admin_home/update_client_review.html', {'form': form, 'client_reviews': client_reviews})
 
     
 
@@ -208,26 +677,31 @@ def update_client_review(request, id):
 def delete_client_review(request,id):
     client_reviews = ClientReview.objects.get(id=id)
     client_reviews.delete()
+    messages.success(request,'Client review deleted successfully!')
+
     return redirect('view_client_reviews')
 
 
 #  Client Logo
 @login_required(login_url='user_login')
+@never_cache
 def add_clients_logo(request):
     if request.method == 'POST':
         form = Client_Logo_Form(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Client logo added successfully!')
             return redirect('view_clients_logo') 
     else:
         form = Client_Logo_Form()
 
-    return render(request, 'admin_pages/add_clients_logo.html', {'form': form})
+    return render(request, 'admin_home/add_clients_logo.html', {'form': form})
 
 @login_required(login_url='user_login')
+@never_cache
 def view_clients_logo(request):
     logo = Client_Logo.objects.all().order_by('-id')
-    return render(request,'admin_pages/view_clients_logo.html',{'logo':logo})
+    return render(request,'admin_home/view_clients_logo.html',{'logo':logo})
 
 @login_required(login_url='user_login')
 def update_clients_logo(request,id):
@@ -239,7 +713,7 @@ def update_clients_logo(request,id):
             return redirect('view_clients_logo')
     else:
         form = Client_Logo_Form(instance=logos)
-    return render(request, 'admin_pages/update_clients_logo.html', {'form': form, 'logos': logos})
+    return render(request, 'admin_home/update_clients_logo.html', {'form': form, 'logos': logos})
 
 @login_required(login_url='user_login')
 def delete_clients_logo(request,id):
@@ -251,21 +725,24 @@ def delete_clients_logo(request,id):
 
 #  Technologies
 @login_required(login_url='user_login')
+@never_cache
 def add_technologies(request):
     if request.method == 'POST':
         form = TechnologiesForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Technology added successfully!')
             return redirect('view_technologies') 
     else:
         form = Client_Logo_Form()
 
-    return render(request, 'admin_pages/add_technologies.html', {'form': form})
+    return render(request, 'admin_home/add_technologies.html', {'form': form})
 
 @login_required(login_url='user_login')
+@never_cache
 def view_technologies(request):
     logo = Technologies.objects.all().order_by('-id')
-    return render(request,'admin_pages/view_technologies.html',{'logo':logo})
+    return render(request,'admin_home/view_technologies.html',{'logo':logo})
 
 @login_required(login_url='user_login')
 def update_technologies(request,id):
@@ -274,36 +751,41 @@ def update_technologies(request,id):
         form = TechnologiesForm(request.POST, request.FILES, instance=logos)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Technology updated successfully!')
             return redirect('view_technologies')
     else:
         form = TechnologiesForm(instance=logos)
-    return render(request, 'admin_pages/update_technologies.html', {'form': form, 'logos': logos})
+    return render(request, 'admin_home/update_technologies.html', {'form': form, 'logos': logos})
 
 @login_required(login_url='user_login')
 def delete_technologies(request,id):
     logos = Technologies.objects.get(id=id)
     logos.delete()
+    messages.success(request,'Technology deleted successfully!')
     return redirect('view_technologies')
 
 
 
 @login_required(login_url='user_login')
+@never_cache
 def add_blog_details(request):
     if request.method == 'POST':
         form = BlogForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Technology updated successfully!')
             return redirect('view_blog_details') 
     else:
         form = BlogForm()
 
-    return render(request, 'admin_pages/add_blog_details.html', {'form': form})
+    return render(request, 'admin_home/add_blog_details.html', {'form': form})
 
 
 @login_required(login_url='user_login')
+@never_cache
 def view_blog_details(request):
     blogs = Blog.objects.all().order_by('-id')
-    return render(request, 'admin_pages/view_blog_details.html', {'blogs': blogs})
+    return render(request, 'admin_home/view_blog_details.html', {'blogs': blogs})
 
 
 @login_required(login_url='user_login')
@@ -313,15 +795,17 @@ def update_blog_details(request, id):
         form = BlogForm(request.POST, request.FILES, instance=blog)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Blog updated successfully!')
             return redirect('view_blog_details')
     else:
         form = BlogForm(instance=blog)
-    return render(request, 'admin_pages/update_blog_details.html', {'form': form, 'blog': blog})
+    return render(request, 'admin_home/update_blog_details.html', {'form': form, 'blog': blog})
 
 @login_required(login_url='user_login')
 def delete_blog_details(request,id):
     blogs = Blog.objects.get(id=id)
     blogs.delete()
+    messages.success(request,'Blog deleted successfully!')
     return redirect('view_blog_details')
 
 from django.http import JsonResponse
@@ -357,24 +841,53 @@ def ckeditor_upload(request):
 
     
 #Team
+# @login_required(login_url='user_login')
+# def add_team(request):
+#     if request.method == 'POST':
+#         form = TeamForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Team member added successfully!')
+#             return redirect('view_team') 
+#     else:
+#         form = TeamForm()
+
+#     return render(request, 'admin_pages/add_team.html', {'form': form})
+
 @login_required(login_url='user_login')
 def add_team(request):
     if request.method == 'POST':
         form = TeamForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Team member added successfully!')
             return redirect('view_team') 
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = TeamForm()
 
-    return render(request, 'admin_pages/add_team.html', {'form': form})
+    return render(request, 'admin_home/add_team.html', {'form': form})
 
 
 @login_required(login_url='user_login')
+@never_cache
 def view_team(request):
     client_reviews = Team.objects.all().order_by('-id')
-    return render(request, 'admin_pages/view_team.html', {'client_reviews': client_reviews})
+    return render(request, 'admin_home/view_team.html', {'client_reviews': client_reviews})
 
+
+# @login_required(login_url='user_login')
+# def update_team(request, id):
+#     client_reviews = get_object_or_404(Team, id=id)
+#     if request.method == 'POST':
+#         form = TeamForm(request.POST, request.FILES, instance=client_reviews)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('view_team')
+#     else:
+#         form = TeamForm(instance=client_reviews)
+#     return render(request, 'admin_pages/update_team.html', {'form': form, 'client_reviews': client_reviews})
 
 @login_required(login_url='user_login')
 def update_team(request, id):
@@ -383,17 +896,20 @@ def update_team(request, id):
         form = TeamForm(request.POST, request.FILES, instance=client_reviews)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Team member updated successfully!')
             return redirect('view_team')
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = TeamForm(instance=client_reviews)
-    return render(request, 'admin_pages/update_team.html', {'form': form, 'client_reviews': client_reviews})
+    return render(request, 'admin_home/update_team.html', {'form': form, 'client_reviews': client_reviews})
 
-    
 
 @login_required(login_url='user_login')
 def delete_team(request,id):
     client_reviews = Team.objects.get(id=id)
     client_reviews.delete()
+    messages.success(request,'Team member deleted successfully!')
     return redirect('view_team')
 
 
@@ -402,26 +918,48 @@ def page_404(request, exception):
     return render(request, '404.html', status=404)
 
 
+def page_500(request):
+    return render(request, '500.html', status=500)
+
 
 
 # Portfolio 
 
+# @login_required(login_url='user_login')
+# def add_project(request):
+#     if request.method == 'POST':
+#         form = ProjectModelForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('view_projects') 
+#     else:
+#         form = ProjectModelForm()
+
+#     return render(request, 'admin_pages/add_project.html', {'form': form})
+
+
 @login_required(login_url='user_login')
+@never_cache
 def add_project(request):
     if request.method == 'POST':
         form = ProjectModelForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('view_projects') 
+            messages.success(request, 'Project added successfully!')
+            return redirect('view_projects')
+        else:
+            # Debug: show errors
+            print(form.errors)  # For console debugging
     else:
         form = ProjectModelForm()
 
-    return render(request, 'admin_pages/add_project.html', {'form': form})
+    return render(request, 'admin_home/add_project.html', {'form': form})
 
 @login_required(login_url='user_login')
+@never_cache
 def view_projects(request):
     projects = ProjectModel.objects.all().order_by('-id')
-    return render(request, 'admin_pages/view_projects.html', {'projects': projects})
+    return render(request, 'admin_home/view_projects.html', {'projects': projects})
 
 @login_required(login_url='user_login')
 def update_projects(request, id):
@@ -433,35 +971,40 @@ def update_projects(request, id):
                 projects.project_image.delete() 
                 projects.project_image = None 
             form.save()
+            messages.success(request, 'Project updated successfully!')
             return redirect('view_projects')
     else:
         form = ProjectModelForm(instance=projects)
-    return render(request, 'admin_pages/update_projects.html', {'form': form, 'projects': projects})
+    return render(request, 'admin_home/update_projects.html', {'form': form, 'projects': projects})
 
 @login_required(login_url='user_login')
 def delete_projects(request,id):
     projects = ProjectModel.objects.get(id=id)
     projects.delete()
+    messages.success(request,'Project deleted successfully!')
     return redirect('view_projects')
 
 
 # Certificate
 @login_required(login_url='user_login')
+@never_cache
 def add_certificates(request):
     if request.method == 'POST':
         form = CertificatesForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Certificate added successfully!')
             return redirect('view_certificates') 
     else:
         form = CertificatesForm()
 
-    return render(request, 'admin_pages/add_certificates.html', {'form': form})
+    return render(request, 'admin_home/add_certificates.html', {'form': form})
 
 @login_required(login_url='user_login')
+@never_cache
 def view_certificates(request):
     certificates = Certificates.objects.all().order_by('-id')
-    return render(request, 'admin_pages/view_certificates.html', {'certificates': certificates})
+    return render(request, 'admin_home/view_certificates.html', {'certificates': certificates})
 
 
 @login_required(login_url='user_login')
@@ -471,22 +1014,47 @@ def update_certificates(request,id):
         form = CertificatesForm(request.POST, request.FILES, instance=certificates)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Certificate updated successfully!')
             return redirect('view_certificates')
     else:
         form = CertificatesForm(instance=certificates)
-    return render(request, 'admin_pages/update_certificates.html', {'form': form, 'certificates': certificates})
+    return render(request, 'admin_home/update_certificates.html', {'form': form, 'certificates': certificates})
 
 
 @login_required(login_url='user_login')
 def delete_certificates(request,id):
     certificates = Certificates.objects.get(id=id)
     certificates.delete()
+    messages.success(request,'Certificate deleted successfully!')
     return redirect('view_certificates')
 
 
-def category_website_detail(request, category_slug, website_slug):
-    category = get_object_or_404(Category, slug=category_slug)
+# def category_website_detail(request, category_slug, website_slug):
+#     category = get_object_or_404(Category, slug=category_slug)
 
+#     # Ensure the category slug is correct
+#     correct_slug = slugify(category.name)
+#     if category.slug != correct_slug:
+#         return redirect('website_detail', category_slug=correct_slug, website_slug=website_slug)
+
+#     # Fetch website correctly
+#     website = get_object_or_404(Website, slug=website_slug, category=category)
+
+#     # Retrieve related services
+#     services = Service.objects.filter(website=website)
+
+#     return render(
+#         request,
+#         'website_detail.html',
+#         {'category': category, 'website': website, 'services': services}
+#     )
+
+
+def category_website_detail(request, category_slug, website_slug):           
+    category = get_object_or_404(Category, slug=category_slug)              
+    
+    client_logos = Client_Logo.objects.all()
+    
     # Ensure the category slug is correct
     correct_slug = slugify(category.name)
     if category.slug != correct_slug:
@@ -494,37 +1062,114 @@ def category_website_detail(request, category_slug, website_slug):
 
     # Fetch website correctly
     website = get_object_or_404(Website, slug=website_slug, category=category)
+    
+        
+    
+    
+    
+    video_id = None
+    video_url = None
+    
+    if website.videos:
+        # Get first line of videos
+        video_lines = [line.strip() for line in website.videos.split('\n') if line.strip()]
+        if video_lines:
+            video_url = video_lines[0]
+            video_id = extract_youtube_id(video_url)
+            
+            print(f"DEBUG - Raw video from DB: {website.videos[:100]}")
+            print(f"DEBUG - First video line: {video_url}")
+            print(f"DEBUG - Extracted video ID: {video_id}")
 
-    # Retrieve related services
-    services = Service.objects.filter(website=website)
+
+
+    
+    # Retrieve all required data
+    services = Services.objects.all()
+    faqs = website.faqs.all()
+    technologies = Technologies.objects.all()
+    blogs = Blog.objects.all()[:3]
+    testimonials = ClientReview.objects.all()
+    
 
     return render(
         request,
-        'website_detail.html',
-        {'category': category, 'website': website, 'services': services}
+        'home/website_detail.html',
+        {
+            'category': category, 
+            'website': website, 
+            'faqs': faqs, 
+            'services': services, 
+            'video_url': video_url,
+            'client_logos':client_logos,
+            'video_id': video_id,
+            'service': services,  # Added for navbar dropdown
+            'technologies': technologies,
+            'blogs': blogs,
+            'testimonials': testimonials
+        }
     )
 
-
-
+import re 
+def extract_youtube_id(url):
+    """
+    Extract YouTube video ID from various URL formats
+    Handles: youtube.com, youtu.be, youtube.com/embed
+    """
+    if not url:
+        return None
+    
+    url = url.strip()
+    
+    # Remove any whitespace
+    url = url.replace(' ', '')
+    
+    # Pattern 1: youtube.com/watch?v=XXXXX
+    pattern1 = r'(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})'
+    match = re.search(pattern1, url)
+    if match:
+        return match.group(1)
+    
+    # Pattern 2: youtu.be/XXXXX
+    pattern2 = r'(?:https?:\/\/)?(?:www\.)?youtu\.be\/([a-zA-Z0-9_-]{11})'
+    match = re.search(pattern2, url)
+    if match:
+        return match.group(1)
+    
+    # Pattern 3: youtube.com/embed/XXXXX
+    pattern3 = r'(?:https?:\/\/)?(?:www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})'
+    match = re.search(pattern3, url)
+    if match:
+        return match.group(1)
+    
+    # Pattern 4: Just the video ID (11 characters)
+    if len(url) == 11 and re.match(r'^[a-zA-Z0-9_-]{11}$', url):
+        return url
+    
+    print(f"DEBUG: Could not extract video ID from: {url}")
+    return None
 
 
 # addd Catgeoory
 @login_required(login_url='user_login')
+@never_cache
 def add_category(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Category added successfully!')
             return redirect('view_category') 
     else:
         form = CategoryForm()
 
-    return render(request, 'admin_pages/add_category.html', {'form': form})
+    return render(request, 'admin_home/add_category.html', {'form': form})
 
 @login_required(login_url='user_login')
+@never_cache
 def view_category(request):
     categories = Category.objects.all().order_by('-id')
-    return render(request, "admin_pages/view_category.html", {"categories": categories})
+    return render(request, "admin_home/view_category.html", {"categories": categories})
 
 
 
@@ -549,33 +1194,86 @@ def update_category(request, id):
     else:
         form = CategoryForm(instance=category)
 
-    return render(request, 'admin_pages/update_category.html', {'form': form, 'category': category})
+    return render(request, 'admin_home/update_category.html', {'form': form, 'category': category})
 
 
 @login_required(login_url='user_login')
 def delete_category(request, category_id):
     category = get_object_or_404(Category, id=category_id)  # ✅ Fetch category properly
     category.delete()
+    messages.success(request,'Category deleted successfully!')
     return redirect("view_category")
 
 
 # Websitee
+from .models import WebsiteFAQ
+
+
+# @login_required(login_url='user_login')
+# def add_website(request):
+#     categories = Category.objects.all()
+
+#     if request.method == "POST":
+#         category_id = request.POST.get("category")
+#         name = request.POST.get("name")
+#         slug = request.POST.get("slug") or slugify(name)  # Ensure slug is generated
+#         meta_title = request.POST.get("meta_title")
+#         meta_description = request.POST.get("meta_description")
+#         description = request.POST.get("description")
+#         add_description = request.POST.get("add_description")
+#         image = request.FILES.get("image")
+
+#         # Ensure unique slug per category
+#         base_slug = slug
+#         counter = 1
+#         while Website.objects.filter(slug=slug).exists():
+#             slug = f"{base_slug}-{counter}"
+#             counter += 1
+
+#         website = Website.objects.create(
+#             category_id=category_id,
+#             name=name,
+#             slug=slug,
+#             meta_title=meta_title,
+#             meta_description=meta_description,
+#             description=description,
+#             add_description=add_description,
+#             image=image,
+#         )
+
+#         # Handling multiple services
+#         service_headings = request.POST.getlist("service_heading[]")
+#         service_descriptions = request.POST.getlist("service_description[]")
+
+#         for heading, desc in zip(service_headings, service_descriptions):
+#             if heading.strip():
+#                 Service.objects.create(website=website, heading=heading, description=desc)
+
+#         # messages.success(request, "Website and services added successfully!")
+#         return redirect(f"/{website.category.slug}/{website.slug}/")
+
+#     return render(request, "admin_pages/add_website.html", {"categories": categories})
 
 @login_required(login_url='user_login')
+@never_cache
 def add_website(request):
     categories = Category.objects.all()
 
     if request.method == "POST":
         category_id = request.POST.get("category")
         name = request.POST.get("name")
-        slug = request.POST.get("slug") or slugify(name)  # Ensure slug is generated
+        slug = request.POST.get("slug") or slugify(name)
+        main_title = request.POST.get("main_title")
         meta_title = request.POST.get("meta_title")
         meta_description = request.POST.get("meta_description")
         description = request.POST.get("description")
         add_description = request.POST.get("add_description")
+        add_title = request.POST.get("add_title")
         image = request.FILES.get("image")
+        videos = request.POST.get("videos") 
 
-        # Ensure unique slug per category
+
+        # Ensure unique slug
         base_slug = slug
         counter = 1
         while Website.objects.filter(slug=slug).exists():
@@ -586,120 +1284,1006 @@ def add_website(request):
             category_id=category_id,
             name=name,
             slug=slug,
+            main_title=main_title,
             meta_title=meta_title,
             meta_description=meta_description,
             description=description,
             add_description=add_description,
             image=image,
+            add_title=add_title,
+            videos=videos
         )
+    
+        # Handle FAQs
+        faq_questions = request.POST.getlist("faq_question[]")
+        faq_answers = request.POST.getlist("faq_answer[]")
 
-        # Handling multiple services
-        service_headings = request.POST.getlist("service_heading[]")
-        service_descriptions = request.POST.getlist("service_description[]")
+        for question, answer in zip(faq_questions, faq_answers):
+            if question.strip() and answer.strip():
+                WebsiteFAQ.objects.create(website=website, question=question, answer=answer)
+                
+        messages.success(request, "Website added successfully!")
 
-        for heading, desc in zip(service_headings, service_descriptions):
-            if heading.strip():
-                Service.objects.create(website=website, heading=heading, description=desc)
+        return redirect('view_websites')
 
-        # messages.success(request, "Website and services added successfully!")
-        return redirect(f"/{website.category.slug}/{website.slug}/")
+    return render(request, "admin_home/add_website.html", {"categories": categories})
 
-    return render(request, "admin_pages/add_website.html", {"categories": categories})
-
+# @login_required(login_url='user_login')
+# @never_cache
+# def view_websites(request):
+#     websites = Website.objects.prefetch_related('services').all().order_by('-id')
+#     return render(request, 'admin_pages/view_website.html', {'websites': websites})
 
 @login_required(login_url='user_login')
+@never_cache
 def view_websites(request):
-    websites = Website.objects.prefetch_related('services').all().order_by('-id')
-    return render(request, 'admin_pages/view_website.html', {'websites': websites})
-
-@login_required(login_url='user_login')
-def update_website(request, website_id):
-    website = get_object_or_404(Website, id=website_id)
+    websites = Website.objects.prefetch_related('faqs').select_related('category').all().order_by('-id')
+    
+    for w in websites:
+        w.public_url = w.get_public_url(request)
+        
     categories = Category.objects.all()
+    return render(request, 'admin_home/view_website.html', {
+        'websites': websites,
+        'categories': categories
+    })
 
-    if request.method == 'POST':
-        # Update website details
+#new view
+@require_http_methods(["GET"])
+def website_api_detail(request, pk):
+    """API endpoint to fetch website details with FAQs"""
+    try:
+        website = get_object_or_404(Website, pk=pk)
+        
+        data = {
+            'id': website.id,
+            'name': website.name,
+            'category_id': website.category.id,
+            'slug': website.slug,
+            'main_title': website.main_title or '',
+            'meta_title': website.meta_title or '',
+            'meta_description': website.meta_description or '',
+            'description': website.description or '',
+            'add_title': website.add_title or '',
+            'add_description': website.add_description or '',
+            'image': website.image.url if website.image else None,
+            'videos': website.videos or '',
+            'public_url': website.get_public_url(request), 
+            'faqs': [
+                {
+                    'id': faq.id,
+                    'question': faq.question,
+                    'answer': faq.answer
+                }
+                for faq in website.faqs.all()
+            ]
+        }
+        
+        return JsonResponse(data)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+# @login_required(login_url='user_login')
+# def update_website(request, website_id):
+#     website = get_object_or_404(Website, id=website_id)
+#     categories = Category.objects.all()
+
+#     if request.method == 'POST':
+#         # Update website details
+#         website.category_id = request.POST.get('category')
+#         website.name = request.POST.get('name')
+#         website.slug = request.POST.get('slug')
+#         website.meta_title = request.POST.get('meta_title')
+#         website.meta_description = request.POST.get('meta_description')
+#         website.description = request.POST.get('description')
+#         website.add_description = request.POST.get('add_description')
+
+#         # Handle Image Upload
+#         if 'image' in request.FILES:
+#             website.image = request.FILES['image']
+
+#         website.save()
+
+#         # Clear existing services and add new ones
+#         website.services.all().delete()  # Delete old services
+#         service_headings = request.POST.getlist('service_heading[]')
+#         service_descriptions = request.POST.getlist('service_description[]')
+
+#         for heading, description in zip(service_headings, service_descriptions):
+#             if heading and description:  # Ensure fields are not empty
+#                 Service.objects.create(website=website, heading=heading, description=description)
+
+#         # messages.success(request, "Website updated successfully!")
+#         return redirect('view_websites')  # Redirect to the view_websites page
+
+#     return render(request, 'admin_pages/update_website.html', {'website': website, 'categories': categories})
+
+
+@require_http_methods(["POST"])
+@transaction.atomic
+def update_website(request, website_id):
+    """Handle website update with FAQs"""
+    website = get_object_or_404(Website, id=website_id)
+
+    try:
+        # Update basic fields
         website.category_id = request.POST.get('category')
         website.name = request.POST.get('name')
         website.slug = request.POST.get('slug')
+        website.main_title = request.POST.get('main_title')
         website.meta_title = request.POST.get('meta_title')
         website.meta_description = request.POST.get('meta_description')
         website.description = request.POST.get('description')
+        website.add_title = request.POST.get('add_title')
         website.add_description = request.POST.get('add_description')
+        website.videos = request.POST.get('videos')
 
-        # Handle Image Upload
+        # Handle image upload
         if 'image' in request.FILES:
             website.image = request.FILES['image']
+            
+        # if 'videos' in request.FILES:
+        #     website.videos = request.FILES['videos']
+
 
         website.save()
 
-        # Clear existing services and add new ones
-        website.services.all().delete()  # Delete old services
-        service_headings = request.POST.getlist('service_heading[]')
-        service_descriptions = request.POST.getlist('service_description[]')
+        # ===== PROCESS FAQs (OPTIONAL, MAX 6) =====
+        faq_count = int(request.POST.get('faqs-TOTAL_FORMS', 0))
+        faqs_to_keep = []
 
-        for heading, description in zip(service_headings, service_descriptions):
-            if heading and description:  # Ensure fields are not empty
-                Service.objects.create(website=website, heading=heading, description=description)
+        for i in range(1, faq_count + 1):
+            faq_id = request.POST.get(f'faqs-{i}-id', '').strip()
+            question = request.POST.get(f'faqs-{i}-question', '').strip()
+            answer = request.POST.get(f'faqs-{i}-answer', '').strip()
+            should_delete = request.POST.get(f'faqs-{i}-DELETE') == 'on'
 
-        # messages.success(request, "Website updated successfully!")
-        return redirect('view_websites')  # Redirect to the view_websites page
+            # Skip if marked for deletion
+            if should_delete:
+                if faq_id:
+                    try:
+                        WebsiteFAQ.objects.filter(id=int(faq_id), website=website).delete()
+                    except (ValueError, WebsiteFAQ.DoesNotExist):
+                        pass
+                continue
 
-    return render(request, 'admin_pages/update_website.html', {'website': website, 'categories': categories})
+            # Skip if both fields are empty
+            if not question or not answer:
+                continue
+
+            # Check max limit
+            if len(faqs_to_keep) >= 6:
+                continue
+
+            if faq_id:
+                # Update existing FAQ
+                try:
+                    faq = WebsiteFAQ.objects.get(id=int(faq_id), website=website)
+                    faq.question = question
+                    faq.answer = answer
+                    faq.save()
+                    faqs_to_keep.append(faq.id)
+                except (ValueError, WebsiteFAQ.DoesNotExist):
+                    # Create new if ID doesn't exist
+                    faq = WebsiteFAQ.objects.create(
+                        website=website,
+                        question=question,
+                        answer=answer
+                    )
+                    faqs_to_keep.append(faq.id)
+            else:
+                # Create new FAQ
+                faq = WebsiteFAQ.objects.create(
+                    website=website,
+                    question=question,
+                    answer=answer
+                )
+                faqs_to_keep.append(faq.id)
+
+        # Delete FAQs not in the keep list
+        if faqs_to_keep:
+            WebsiteFAQ.objects.filter(website=website).exclude(id__in=faqs_to_keep).delete()
+        else:
+            WebsiteFAQ.objects.filter(website=website).delete()
+            
+        messages.success(request, 'Website updated successfully!')
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Website updated successfully!'
+        })
+
+    except Exception as e:
+        import traceback
+        print(f"Error updating website: {str(e)}")
+        print(traceback.format_exc())
+        return JsonResponse({
+            'success': False,
+            'message': f'An error occurred: {str(e)}'
+        }, status=500)
+
+
 
 @login_required(login_url='user_login')
 def delete_website(request, website_id):
     website = get_object_or_404(Website, id=website_id)
     website.delete()
-    # messages.success(request, "Website deleted successfully!")
+    messages.success(request, "Website deleted successfully!")
     return redirect('view_websites') 
 
 
 
 @login_required(login_url='user_login')
+@never_cache
 def add_job_details(request):
     if request.method == 'POST':
         form = CareerForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Job details added successfully!')
             return redirect('view_job_details') 
     else:
         form = CareerForm()
 
-    return render(request, 'admin_pages/add_job_details.html', {'form': form})
+    return render(request, 'admin_home/add_job_details.html', {'form': form})
 
 @login_required(login_url='user_login')
+@never_cache
 def view_job_details(request):
     job_details = Career_Model.objects.all().order_by('-id')
-    return render(request, 'admin_pages/view_job_details.html', {'job_details': job_details})
+    return render(request, 'admin_home/view_job_details.html', {'job_details': job_details})
+
+# @login_required(login_url='user_login')
+# def update_job_details(request, id):
+#     job_details = get_object_or_404(Career_Model, id=id)
+#     if request.method == 'POST':
+#         form = CareerForm(request.POST, request.FILES, instance=job_details)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('view_job_details')
+#     else:
+#         form = CareerForm(instance=job_details)
+#     return render(request, 'admin_pages/update_job_details.html', {'form': form, 'job_details': job_details})
 
 @login_required(login_url='user_login')
 def update_job_details(request, id):
-    job_details = get_object_or_404(Career_Model, id=id)
+    job = get_object_or_404(Career_Model, id=id)
     if request.method == 'POST':
-        form = CareerForm(request.POST, request.FILES, instance=job_details)
+        form = CareerForm(request.POST, request.FILES, instance=job)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Job details updated successfully!')
             return redirect('view_job_details')
-    else:
-        form = CareerForm(instance=job_details)
-    return render(request, 'admin_pages/update_job_details.html', {'form': form, 'job_details': job_details})
+    return redirect('view_job_details')
 
 
 @login_required(login_url='user_login')
 def delete_job_details(request,id):
     job_details = Career_Model.objects.get(id=id)
     job_details.delete()
+    messages.success(request,'Job details deleted successfully!')
     return redirect('view_job_details')
 
 @login_required(login_url='user_login')
 def view_candidate_details(request):
     certificates = Candidate.objects.all().order_by('-id')
-    return render(request, 'admin_pages/view_candidate_certificates.html', {'certificates': certificates})
+    return render(request, 'admin_home/view_candidate_certificate.html', {'certificates': certificates})
 
 
 @login_required(login_url='user_login')
 def delete_candidate_certificates(request, id):
     candidate = get_object_or_404(Candidate, id=id)
     candidate.delete()
+    messages.success(request,'Certificate deleted successfully!')
     return redirect('view_candidate_details')
+
+
+#new views
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.utils import timezone
+from .models import PromotionalBanner
+from .forms import PromotionalBannerForm
+
+
+# Admin views
+@login_required
+def banner_list(request):
+    """List all promotional banners"""
+    banners = PromotionalBanner.objects.all()
+    
+    # Add active status for each banner
+    for banner in banners:
+        banner.is_currently_active = banner.is_active()
+    
+    context = {
+        'banners': banners
+    }
+    return render(request, 'admin_home/banner_list.html', context)
+
+
+@login_required
+def add_banner(request):
+    """Add new promotional banner"""
+    if request.method == 'POST':
+        form = PromotionalBannerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Promotional banner added successfully!')
+            return redirect('banner_list')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = PromotionalBannerForm()
+    
+    context = {
+        'form': form,
+        'action': 'Add'
+    }
+    return render(request, 'admin_home/add_banner.html', context)
+
+@login_required
+def update_banner(request, pk):
+    """Update existing promotional banner"""
+    banner = get_object_or_404(PromotionalBanner, pk=pk)
+    
+    if request.method == 'POST':
+        form = PromotionalBannerForm(request.POST, instance=banner)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Promotional banner updated successfully!')
+            return redirect('banner_list')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = PromotionalBannerForm(instance=banner)
+    
+    context = {
+        'form': form,
+        'banner': banner,
+        'action': 'Update'
+    }
+    return render(request, 'admin_home/add_banner.html', context)
+
+@login_required
+def delete_banner(request, pk):
+    """Delete promotional banner"""
+    banner = get_object_or_404(PromotionalBanner, pk=pk)
+    
+    if request.method == 'POST':
+        banner.delete()
+        messages.success(request, 'Promotional banner deleted successfully!')
+        return redirect('banner_list')
+    
+    return redirect('banner_list')
+
+#new views
+#partners views
+@login_required
+@never_cache
+def partner_list(request):
+    partners = Partner.objects.all()
+    return render(request, "admin_home/partner_list.html", {"partners": partners})
+
+@login_required
+@never_cache
+def add_partner(request):
+    if request.method == "POST":
+        form = PartnerForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'added partner sucessfully.')
+            return redirect("partner_list")
+    else:
+        form = PartnerForm()
+    return render(request, "admin_home/add_partner.html", {"form": form})
+
+def update_partner(request, pk):
+    partner = get_object_or_404(Partner, pk=pk)
+    if request.method == "POST":
+        form = PartnerForm(request.POST, request.FILES, instance=partner)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'updated partner sucessfully.')
+            return redirect("partner_list")
+    else:
+        form = PartnerForm(instance=partner)
+    return render(request, "admin_home/partner_list.html", {"form": form})
+
+def delete_partner(request, pk):
+    partner = get_object_or_404(Partner, pk=pk)
+    partner.delete()
+    messages.success(request,'delete partner sucessfully.')
+    return redirect("partner_list")
+
+def partners(request):
+    """Partners page view"""
+    # Get all client logos for partners section
+    client_logos = Client_Logo.objects.all()
+    services = Services.objects.all()
+    
+    # Get testimonials
+    reviews = ClientReview.objects.all()
+    
+    # Get services for footer
+    footer_services = Services.objects.order_by("?")[:4]
+    
+    # Get career job count for hiring badge
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+    
+    # Get projects for offcanvas
+    projects = ProjectModel.objects.all()
+    
+    partners = Partner.objects.all().order_by('-created_at')
+    
+    context = {
+        'client_logos': client_logos,
+        'reviews': reviews,
+        'footer_services': footer_services,
+        'career_job_count': active_jobs,
+        'projects': projects,
+        'services':services,
+        'partners': partners
+    }
+    
+    return render(request, 'home/partne.html', context)
+
+
+#training faqs
+def faq_page(request, service_slug):
+    selected_service = get_object_or_404(TrainService, slug=service_slug)
+    all_train_services = TrainService.objects.annotate(faq_count=Count('faqs')).filter(faq_count__gt=0)
+    
+    context = {
+        "train_service": selected_service,
+        "services": Services.objects.all(),
+        "footer_services": Services.objects.order_by("?")[:4],
+        "faqs": selected_service.faqs.all(),
+        "all_train_services": all_train_services,
+    }
+    return render(request, "home/faq.html", context)
+
+#train service crud
+@login_required
+@never_cache
+def train_service_list(request):
+    services = TrainService.objects.all()
+    return render(request, "admin_home/train_service_list.html", {"train_services": services})
+
+@login_required
+@never_cache
+def add_train_service(request):
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()
+        meta_title = request.POST.get("meta_title", "").strip()
+        meta_description = request.POST.get("meta_description", "").strip()
+        
+        if not name:
+            messages.error(request, "Train Service name is required.")
+            return redirect("add_train_service")
+        
+        TrainService.objects.create(
+            name=name, 
+            slug=slugify(name),
+            meta_title=meta_title if meta_title else None,
+            meta_description=meta_description if meta_description else None
+        )
+        messages.success(request, "Train Service added successfully!")
+        return redirect("train_service_list")
+    return render(request, "admin_home/add_train_service.html")
+
+@login_required
+def update_train_service(request, service_id):
+    service = get_object_or_404(TrainService, id=service_id)
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()
+        meta_title = request.POST.get("meta_title", "").strip()
+        meta_description = request.POST.get("meta_description", "").strip()
+        
+        service.name = name
+        service.slug = slugify(name)
+        service.meta_title = meta_title if meta_title else None
+        service.meta_description = meta_description if meta_description else None
+        service.save()
+        
+        messages.success(request, "Train Service updated successfully!")
+        return redirect("train_service_list")
+    return redirect("train_service_list")
+
+@login_required
+def delete_train_service(request, service_id):
+    service = get_object_or_404(TrainService, id=service_id)
+    service.delete()
+    messages.success(request, "Train Service deleted successfully!")
+    return redirect("train_service_list")
+
+
+@login_required
+@never_cache
+def train_faq_list(request):
+    faqs = TrainFAQ.objects.select_related('train_service').all()
+    return render(request, "admin_home/train_faq_list.html", {"train_faqs": faqs})
+
+@login_required
+@never_cache
+def add_train_faq(request):
+    services = TrainService.objects.all()
+    if request.method == "POST":
+        service_id = request.POST.get("train_service")
+        
+        if not service_id:
+            messages.error(request, "Please select a train service.")
+            return redirect("add_train_faq")
+        
+        service = get_object_or_404(TrainService, id=service_id)
+        
+        # Get all FAQ entries from the form
+        faq_count = 0
+        for key in request.POST:
+            if key.startswith('question_'):
+                index = key.split('_')[1]
+                question = request.POST.get(f'question_{index}', '').strip()
+                answer = request.POST.get(f'answer_{index}', '').strip()
+                
+                # Only create FAQ if both question and answer are provided
+                if question and answer:
+                    TrainFAQ.objects.create(
+                        train_service=service,
+                        question=question,
+                        answer=answer
+                    )
+                    faq_count += 1
+        
+        if faq_count > 0:
+            messages.success(request, f"{faq_count} FAQ(s) added successfully!")
+            return redirect("train_faq_list")
+        else:
+            messages.error(request, "Please add at least one FAQ with both question and answer.")
+            return redirect("add_train_faq")
+    
+    return render(request, "admin_home/add_train_faq.html", {"train_services": services})
+
+
+@login_required
+def update_train_faq(request, faq_id):
+    faq = get_object_or_404(TrainFAQ, id=faq_id)
+    if request.method == "POST":
+        service_id = request.POST.get("train_service")
+        question = request.POST.get("question", "").strip()
+        answer = request.POST.get("answer", "").strip()
+        
+        if service_id:
+            faq.train_service = get_object_or_404(TrainService, id=service_id)
+        if question:
+            faq.question = question
+        if answer:
+            faq.answer = answer
+            
+        faq.save()
+        messages.success(request, "Train FAQ updated successfully!")
+        return redirect("train_faq_list")
+    return redirect("train_faq_list")
+
+@login_required
+def delete_train_faq(request, faq_id):
+    faq = get_object_or_404(TrainFAQ, id=faq_id)
+    faq.delete()
+    messages.success(request, "Train FAQ deleted successfully!")
+    return redirect("train_faq_list")
+
+
+from .models import Services
+from .forms import ServiceForm, OfferFormSet, StepFormSet,FAQFormSet
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.db import transaction
+
+
+#service crud
+@login_required
+@never_cache
+def service_list(request):
+    services = Services.objects.all()
+    return render(request, "admin_home/service_list.html", {"services": services})
+
+def service_detail(request,  slug):
+    service = get_object_or_404(Services, slug=slug)
+    services = Services.objects.all()   
+    offers = getattr(service, 'offers', None)  # if offers is a related_name
+    other_services = Services.objects.exclude(id=service.id)[:7]
+    process_steps = service.process_steps.all().order_by('id')
+    footer_services = Services.objects.order_by("?")[:4]
+    active_jobs = Career_Model.objects.filter(post_end_date__gte=timezone.now()).count()
+    
+    context = {
+        'service': service,
+        'offers': offers,
+        'other_services': other_services,
+        'process_steps': process_steps,
+        'services':services,
+        'footer_services':footer_services,
+        'career_job_count': active_jobs,
+    }
+    return render(request, 'home/service.html', context)
+
+@require_http_methods(["GET"])
+def service_api_detail(request, pk):
+    """API endpoint to fetch service details with related data"""
+    try:
+        service = get_object_or_404(Services, pk=pk)
+        
+        data = {
+            'id': service.id,
+            'name': service.name,
+            'description': service.description,
+            'image': service.image.url if service.image else None,
+            'meta_title': service.meta_title,
+            'meta_description': service.meta_description,
+            
+            'offers': [
+                {
+                    'id': offer.id,
+                    'title': offer.title,
+                    'description': offer.description
+                }
+                for offer in service.offers.all()
+            ],
+            'steps': [
+                {
+                    'id': step.id,
+                    'title': step.title,
+                    'tagline': step.tagline
+                }
+                for step in service.process_steps.all().order_by('id')
+            ],
+            'faqs': [
+                {
+                    'id': faq.id,
+                    'question': faq.question,
+                    'answer': faq.answer
+                }
+                for faq in service.faqs.all()
+            ]
+        }
+        
+        return JsonResponse(data)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+@require_http_methods(["POST"])
+@transaction.atomic
+def service_update(request, pk):
+    """Handle service update with proper formset handling"""
+    service = get_object_or_404(Services, pk=pk)
+    
+    try:
+        # Update main service fields
+        form = ServiceForm(request.POST, request.FILES, instance=service)
+        
+        if not form.is_valid():
+            return JsonResponse({
+                'success': False,
+                'message': 'Please correct the errors in the service form.',
+                'errors': form.errors
+            }, status=400)
+        
+        service = form.save()
+        
+        # ===== PROCESS OFFERS (OPTIONAL, UNLIMITED) =====
+        offer_count = int(request.POST.get('offers-TOTAL_FORMS', 0))
+        offers_to_keep = []
+        
+        for i in range(1, offer_count + 1):
+            offer_id = request.POST.get(f'offers-{i}-id', '').strip()
+            title = request.POST.get(f'offers-{i}-title', '').strip()
+            description = request.POST.get(f'offers-{i}-description', '').strip()
+            should_delete = request.POST.get(f'offers-{i}-DELETE') == 'on'
+            
+            # Skip if marked for deletion
+            if should_delete:
+                if offer_id:
+                    try:
+                        ServiceOffer.objects.filter(id=int(offer_id), service=service).delete()
+                    except (ValueError, ServiceOffer.DoesNotExist):
+                        pass
+                continue
+            
+            # Skip if both fields are empty
+            if not title or not description:
+                continue
+            
+            if offer_id:
+                # Update existing offer
+                try:
+                    offer = ServiceOffer.objects.get(id=int(offer_id), service=service)
+                    offer.title = title
+                    offer.description = description
+                    offer.save()
+                    offers_to_keep.append(offer.id)
+                except (ValueError, ServiceOffer.DoesNotExist):
+                    # Create new if ID doesn't exist
+                    offer = ServiceOffer.objects.create(
+                        service=service,
+                        title=title,
+                        description=description
+                    )
+                    offers_to_keep.append(offer.id)
+            else:
+                # Create new offer
+                offer = ServiceOffer.objects.create(
+                    service=service,
+                    title=title,
+                    description=description
+                )
+                offers_to_keep.append(offer.id)
+        
+        # Delete offers not in the keep list
+        if offers_to_keep:
+            ServiceOffer.objects.filter(service=service).exclude(id__in=offers_to_keep).delete()
+        else:
+            ServiceOffer.objects.filter(service=service).delete()
+        
+        # ===== PROCESS STEPS (MANDATORY, EXACTLY 4) =====
+        valid_steps = []
+        
+        # Steps are always numbered 1-4
+        for i in range(1, 5):
+            step_id = request.POST.get(f'steps-{i}-id', '').strip()
+            title = request.POST.get(f'steps-{i}-title', '').strip()
+            tagline = request.POST.get(f'steps-{i}-tagline', '').strip()
+            
+            # All 4 steps must be filled
+            if not title or not tagline:
+                return JsonResponse({
+                    'success': False,
+                    'message': f'Step {i} is incomplete. All 4 process steps must be filled.'
+                }, status=400)
+            
+            valid_steps.append({
+                'id': step_id,
+                'title': title,
+                'tagline': tagline
+            })
+        
+        # Delete all existing steps
+        ServiceProcessStep.objects.filter(service=service).delete()
+        
+        # Create new steps
+        for step_data in valid_steps:
+            ServiceProcessStep.objects.create(
+                service=service,
+                title=step_data['title'],
+                tagline=step_data['tagline']
+            )
+        
+        # ===== PROCESS FAQs (OPTIONAL, MAX 6) =====
+        faq_count = int(request.POST.get('faqs-TOTAL_FORMS', 0))
+        faqs_to_keep = []
+        
+        for i in range(1, faq_count + 1):
+            faq_id = request.POST.get(f'faqs-{i}-id', '').strip()
+            question = request.POST.get(f'faqs-{i}-question', '').strip()
+            answer = request.POST.get(f'faqs-{i}-answer', '').strip()
+            should_delete = request.POST.get(f'faqs-{i}-DELETE') == 'on'
+            
+            # Skip if marked for deletion
+            if should_delete:
+                if faq_id:
+                    try:
+                        ServiceFAQ.objects.filter(id=int(faq_id), service=service).delete()
+                    except (ValueError, ServiceFAQ.DoesNotExist):
+                        pass
+                continue
+            
+            # Skip if both fields are empty
+            if not question or not answer:
+                continue
+            
+            # Check max limit
+            if len(faqs_to_keep) >= 6:
+                continue
+            
+            if faq_id:
+                # Update existing FAQ
+                try:
+                    faq = ServiceFAQ.objects.get(id=int(faq_id), service=service)
+                    faq.question = question
+                    faq.answer = answer
+                    faq.save()
+                    faqs_to_keep.append(faq.id)
+                except (ValueError, ServiceFAQ.DoesNotExist):
+                    # Create new if ID doesn't exist
+                    faq = ServiceFAQ.objects.create(
+                        service=service,
+                        question=question,
+                        answer=answer
+                    )
+                    faqs_to_keep.append(faq.id)
+            else:
+                # Create new FAQ
+                faq = ServiceFAQ.objects.create(
+                    service=service,
+                    question=question,
+                    answer=answer
+                )
+                faqs_to_keep.append(faq.id)
+        
+        # Delete FAQs not in the keep list
+        if faqs_to_keep:
+            ServiceFAQ.objects.filter(service=service).exclude(id__in=faqs_to_keep).delete()
+        else:
+            ServiceFAQ.objects.filter(service=service).delete()
+            
+        messages.success(request, 'Service updated successfully!')
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Service updated successfully!'
+        })
+        
+    except Exception as e:
+        import traceback
+        print(f"Error updating service: {str(e)}")
+        print(traceback.format_exc())
+        
+        messages.error(request, f'Error updating service: {str(e)}')
+        
+        return JsonResponse({
+            'success': False,
+            'message': f'An error occurred: {str(e)}'
+        }, status=500)
+        
+        
+
+
+
+def service_delete(request, pk):
+    service = get_object_or_404(Services, pk=pk)
+    service.delete()
+    messages.success(request, "Service deleted successfully.")
+    return redirect("service_list")
+
+from django.db import transaction
+
+@login_required
+@never_cache
+def service_create(request):
+    if request.method == "POST":
+        # 1. Initialize all forms with POST data
+        form = ServiceForm(request.POST, request.FILES)
+        offer_formset = OfferFormSet(request.POST)
+        step_formset = StepFormSet(request.POST)
+        faq_formset = FAQFormSet(request.POST)
+
+        # 2. Check MAIN form first (Service)
+        if form.is_valid():
+            try:
+                with transaction.atomic():
+                    # A. Save the Service first (so it gets an ID)
+                    service = form.save()
+
+                    # B. Bind the formsets to this new Service ID
+                    offer_formset.instance = service
+                    step_formset.instance = service
+                    faq_formset.instance = service
+
+                    # C. NOW validate the formsets (Safe because Service ID exists)
+                    if (offer_formset.is_valid() and 
+                        step_formset.is_valid() and 
+                        faq_formset.is_valid()):
+                        
+                        offer_formset.save()
+                        step_formset.save()
+                        faq_formset.save()
+
+                        messages.success(request, "Service created successfully.")
+                        return redirect("service_list")
+                    else:
+                        # D. If formsets are invalid, force a rollback
+                        # This deletes the Service we just created so we don't have incomplete data
+                        raise ValueError("Formset validation failed")
+
+            except ValueError:
+                # The transaction rollback happens automatically here.
+                # The formsets still contain the error messages, which will display in the template.
+                messages.error(request, "Please correct the errors in the offers, steps, or FAQs.")
+        
+        else:
+            messages.error(request, "Please correct the errors in the main service form.")
+
+    else:
+        # GET Request Logic
+        form = ServiceForm()
+        offer_formset = OfferFormSet()
+        step_formset = StepFormSet()
+        faq_formset = FAQFormSet()
+
+    # 3. Render the page (This MUST be outside the if/else blocks)
+    return render(request, "admin_home/add_service.html", {
+        "form": form,
+        "offer_formset": offer_formset,
+        "step_formset": step_formset,
+        "faq_formset": faq_formset,
+        "title": "Add Service"
+    })
+
+
+# @login_required
+# @never_cache
+# def service_create(request):
+#     if request.method == "POST":
+#         form = ServiceForm(request.POST, request.FILES)
+#         offer_formset = OfferFormSet(request.POST)
+#         step_formset = StepFormSet(request.POST)
+#         faq_formset = FAQFormSet(request.POST)
+
+#         if (form.is_valid() and offer_formset.is_valid() and
+#             step_formset.is_valid() and faq_formset.is_valid()):
+
+#             service = form.save()
+#             offer_formset.instance = service
+#             step_formset.instance = service
+#             faq_formset.instance = service
+
+#             offer_formset.save()
+#             step_formset.save()
+#             faq_formset.save()
+
+#             messages.success(request, "Service created successfully.")
+#             return redirect("service_list")
+#     else:
+#         form = ServiceForm()
+#         offer_formset = OfferFormSet()
+#         step_formset = StepFormSet()
+#         faq_formset = FAQFormSet()
+
+#     return render(request, "admin_home/add_service.html", {
+#         "form": form,
+#         "offer_formset": offer_formset,
+#         "step_formset": step_formset,
+#         "faq_formset": faq_formset,
+#         "title": "Add Service"
+#     })
+
+def subscribe_newsletter(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+
+        if not email:
+            messages.error(request, "Email is required.")
+            return redirect(request.META.get('HTTP_REFERER'))
+
+        # Prevent duplicates
+        if Newsletter.objects.filter(email=email).exists():
+            messages.warning(request, "You are already subscribed!")
+            return redirect(request.META.get('HTTP_REFERER'))
+
+        Newsletter.objects.create(email=email)
+        messages.success(request, "Subscribed successfully!")
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    return redirect("/")
+
+
+@login_required
+@never_cache
+def newsletter_list(request):
+    newsletters = Newsletter.objects.all().order_by('-id')
+    return render(request, 'admin_home/newsletter_list.html', {'newsletters': newsletters})
+
+@login_required(login_url='user_login')
+@never_cache
+def delete_newsletter(request, newsletter_id):
+    if request.method == 'POST':
+        newsletter = get_object_or_404(Newsletter, id=newsletter_id)
+        email = newsletter.email
+        newsletter.delete()
+        messages.success(request, f'Newsletter subscription for {email} has been deleted successfully.')
+        return redirect('newsletter_list')
+    
+    # If not POST, redirect back to newsletter list
+    return redirect('newsletter_list')

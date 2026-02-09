@@ -1,0 +1,509 @@
+{% extends 'admin_home/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .add-service-container {
+    max-width: 900px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .page-header {
+    margin-bottom: 30px;
+  }
+
+  .page-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 8px;
+  }
+
+  .page-header p {
+    color: #6c757d;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #6c757d;
+    margin-top: 10px;
+  }
+
+  .breadcrumb-nav a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .breadcrumb-nav a:hover {
+    color: #2980b9;
+  }
+
+  .breadcrumb-nav i {
+    font-size: 12px;
+  }
+
+  .form-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  .form-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 30px;
+    color: white;
+    text-align: center;
+  }
+
+  .form-header i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.9;
+  }
+
+  .form-header h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .form-header p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  .form-body {
+    padding: 40px;
+  }
+
+  .form-section {
+    margin-bottom: 30px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title i {
+    color: #3498db;
+    font-size: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+  }
+
+  .form-label .required {
+    color: #e74c3c;
+    margin-left: 4px;
+  }
+
+  .form-label .optional {
+    color: #95a5a6;
+    font-weight: 400;
+    font-size: 12px;
+    margin-left: 4px;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    font-family: inherit;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #3498db;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+  }
+
+  .form-control:hover {
+    border-color: #cbd5e0;
+  }
+
+  textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  .input-icon-wrapper {
+    position: relative;
+  }
+
+  .input-icon-wrapper i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 18px;
+  }
+
+  .input-icon-wrapper .form-control {
+    padding-left: 48px;
+  }
+
+  .slug-preview {
+    margin-top: 8px;
+    padding: 10px 16px;
+    background: #e8f4f8;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #2980b9;
+    font-family: 'Courier New', monospace;
+    display: none;
+  }
+
+  .slug-preview.show {
+    display: block;
+  }
+
+  .slug-preview i {
+    margin-right: 8px;
+  }
+
+  .char-counter {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  .char-counter.warning {
+    color: #f39c12;
+  }
+
+  .char-counter.danger {
+    color: #e74c3c;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 35px;
+    padding-top: 30px;
+    border-top: 2px solid #f1f3f5;
+  }
+
+  .btn {
+    padding: 14px 32px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    flex: 1;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+  }
+
+  .btn-secondary {
+    background: #e9ecef;
+    color: #495057;
+    flex: 1;
+  }
+
+  .btn-secondary:hover {
+    background: #dee2e6;
+  }
+
+  .btn i {
+    font-size: 18px;
+  }
+
+  .help-text {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .help-text i {
+    font-size: 14px;
+  }
+
+  .seo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 768px) {
+    .form-body {
+      padding: 30px 20px;
+    }
+
+    .form-header {
+      padding: 25px 20px;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+
+<div class="add-service-container">
+  <div class="page-header">
+    <h2>Add FAQ Service Category</h2>
+    <p>Create a new FAQ service for your system</p>
+    <div class="breadcrumb-nav">
+      <a href="{% url 'train_service_list' %}"><i class="mdi mdi-format-list-bulleted"></i> Services</a>
+      <i class="mdi mdi-chevron-right"></i>
+      <span>Add Service</span>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-header">
+      <i class="mdi mdi-plus-circle"></i>
+      <h3>New FAQ Service</h3>
+      <p>Fill in the details below to add a new train service</p>
+    </div>
+
+    <div class="form-body">
+      <form method="POST" id="addServiceForm">
+        {% csrf_token %}
+        
+        <!-- Basic Information Section -->
+        <div class="form-section">
+          <div class="section-title">
+            <i class="mdi mdi-information"></i>
+            <span>Service Information</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Service Name<span class="required">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <i class="mdi mdi-file-document"></i>
+              <input 
+                type="text" 
+                class="form-control" 
+                name="name" 
+                id="serviceName"
+                placeholder="Enter training service name (e.g., Web Development, Digital Marketing)" 
+                required
+              >
+            </div>
+            <div class="help-text">
+              <i class="mdi mdi-information"></i>
+              <span>Enter a unique name for the train service</span>
+            </div>
+            <div class="slug-preview" id="slugPreview">
+              <i class="mdi mdi-link-variant"></i>
+              <strong>Slug:</strong> <span id="slugValue"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO Section -->
+        <div class="form-section">
+          <div class="section-title">
+            <i class="mdi mdi-search-web"></i>
+            <span>SEO Settings</span>
+            <span class="seo-badge">
+              <i class="mdi mdi-check-circle"></i>
+              Optional
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Meta Title<span class="optional">(optional)</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <i class="mdi mdi-format-title"></i>
+              <input 
+                type="text" 
+                class="form-control" 
+                name="meta_title" 
+                id="metaTitle"
+                placeholder="Enter SEO meta title (recommended: 50-60 characters)"
+                maxlength="255"
+              >
+            </div>
+            <div class="char-counter" id="titleCounter">0 / 255 characters</div>
+            <div class="help-text">
+              <i class="mdi mdi-lightbulb"></i>
+              <span>This will appear in search engine results as the page title</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Meta Description<span class="optional">(optional)</span>
+            </label>
+            <textarea 
+              class="form-control" 
+              name="meta_description" 
+              id="metaDescription"
+              placeholder="Enter SEO meta description (recommended: 150-160 characters)"
+              maxlength="500"
+            ></textarea>
+            <div class="char-counter" id="descCounter">0 / 500 characters</div>
+            <div class="help-text">
+              <i class="mdi mdi-lightbulb"></i>
+              <span>This will appear in search results as the page description</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'train_service_list' %}'">
+            <i class="mdi mdi-arrow-left"></i>
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="mdi mdi-check"></i>
+            Add Service
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Slug generation
+  const serviceNameInput = document.getElementById('serviceName');
+  const slugPreview = document.getElementById('slugPreview');
+  const slugValue = document.getElementById('slugValue');
+
+  function generateSlug(text) {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  serviceNameInput.addEventListener('input', function() {
+    const name = this.value;
+    if (name.length > 0) {
+      const slug = generateSlug(name);
+      slugValue.textContent = slug;
+      slugPreview.classList.add('show');
+    } else {
+      slugPreview.classList.remove('show');
+    }
+  });
+
+  // Character counters
+  const metaTitleInput = document.getElementById('metaTitle');
+  const metaDescInput = document.getElementById('metaDescription');
+  const titleCounter = document.getElementById('titleCounter');
+  const descCounter = document.getElementById('descCounter');
+
+  function updateCounter(input, counter, max, recommended) {
+    const length = input.value.length;
+    counter.textContent = `${length} / ${max} characters`;
+    
+    counter.classList.remove('warning', 'danger');
+    if (length > max * 0.9) {
+      counter.classList.add('danger');
+    } else if (length > max * 0.8) {
+      counter.classList.add('warning');
+    }
+    
+    if (recommended && length > 0 && length < recommended.min) {
+      counter.textContent += ` (recommended: ${recommended.min}-${recommended.max})`;
+      counter.classList.add('warning');
+    }
+  }
+
+  metaTitleInput.addEventListener('input', function() {
+    updateCounter(this, titleCounter, 255, { min: 50, max: 60 });
+  });
+
+  metaDescInput.addEventListener('input', function() {
+    updateCounter(this, descCounter, 500, { min: 150, max: 160 });
+  });
+
+  // Form validation
+  const form = document.getElementById('addServiceForm');
+  form.addEventListener('submit', function(e) {
+    const name = serviceNameInput.value.trim();
+
+    if (!name) {
+      e.preventDefault();
+      alert('Please enter a service name');
+      return false;
+    }
+
+    if (name.length < 3) {
+      e.preventDefault();
+      alert('Service name must be at least 3 characters long');
+      return false;
+    }
+
+    const submitBtn = form.querySelector('[type="submit"]');
+    submitBtn.innerHTML = '<i class="mdi mdi-loading mdi-spin"></i> Adding...';
+    submitBtn.disabled = true;
+  });
+</script>
+{% endblock %}

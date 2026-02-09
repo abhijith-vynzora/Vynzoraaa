@@ -42,6 +42,8 @@ def robots_txt(request):
     return HttpResponse(content.strip(), content_type="text/plain")
 
 urlpatterns = [
+    path("ckeditor/", include("ckeditor_uploader.urls")),
+
     path('admin/', admin.site.urls),
     path('', include('vynzora_app.urls')),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
