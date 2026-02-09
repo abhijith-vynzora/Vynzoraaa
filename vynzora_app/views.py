@@ -2287,7 +2287,3 @@ def delete_newsletter(request, newsletter_id):
     
     # If not POST, redirect back to newsletter list
     return redirect('newsletter_list')
-
-#for creating superuser-- will be changed and deleete d
-from django.http import HttpResponse
-from django.contrib.auth.models import User
