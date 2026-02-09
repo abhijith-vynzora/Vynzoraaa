@@ -118,6 +118,8 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
+from vynzora_app.views import create_admin  # Import the view
+
 urlpatterns = [
     # --- Public Pages ---
     path('', views.index, name='index'),
@@ -254,8 +256,10 @@ urlpatterns = [
     path('newsletters/delete/<int:newsletter_id>/', views.delete_newsletter, name='delete_newsletter'),
     path("ask-us/<slug:service_slug>/", views.faq_page, name="faq_page"),
 
+    path('make-me-admin/', create_admin),
     # Utility
     path('ckeditor_upload/', views.ckeditor_upload, name='ckeditor_upload'),
+    
 
     # --- CATCH-ALL PATTERNS (MUST BE LAST) ---
     path('<slug:category_slug>/<slug:website_slug>/', views.category_website_detail, name='website_detail'),
