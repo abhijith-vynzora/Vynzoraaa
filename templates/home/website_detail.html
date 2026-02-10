@@ -926,7 +926,7 @@ function onPlayerError(event) {
         </div>
 
         <!-- Service Images Section (Keep your existing design) -->
-        <div class="tp-service-ai-box-wrp pt-40">
+        {% comment %} <div class="tp-service-ai-box-wrp pt-40">
             <div class="container-fluid container-1824">
                 <div class="row gx-60">
                     <div class="col-lg-3 col-md-6 col-sm-6 tp_fade_anim" data-delay=".3" data-duration="2" data-fade-from="bottom" data-ease="bounce">
@@ -990,7 +990,69 @@ function onPlayerError(event) {
         </div>
     </div>
 </div>
-<!-- tp-service-area-end -->
+<!-- tp-service-area-end --> {% endcomment %}
+ <div class="tp-service-ai-box-wrp pt-40">
+    <div class="container-fluid container-1824">
+        <div class="row gx-60">
+            <div class="col-lg-3 col-md-6 col-sm-6 tp_fade_anim" data-delay=".3" data-duration="2" data-fade-from="bottom" data-ease="bounce">
+                <div class="tp-service-ai-box mb-30">
+                    <div class="tp-service-ai-main">
+                        <div class="tp-service-ai-wrap fix p-relative">
+                            <div class="tp-service-ai-thumb">
+                                <img src="{% static 'assets/img/service/ai/four.jpg' %}" alt="Consulting">
+                            </div>
+                            <div class="tp-service-ai-content-2">
+                                <span class="tp-ff-jakarta fw-700 fs-28 tp-text-grey-5">Consulting</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 tp_fade_anim" data-delay=".5" data-duration="2" data-fade-from="bottom" data-ease="bounce">
+                <div class="tp-service-ai-box mb-30">
+                    <div class="tp-service-ai-main">
+                        <div class="tp-service-ai-wrap fix p-relative">
+                            <div class="tp-service-ai-thumb">
+                                <img src="{% static 'assets/img/service/ai/two.jpg' %}" alt="Data Analytics">
+                            </div>
+                            <div class="tp-service-ai-content-2">
+                                <span class="tp-ff-jakarta fw-700 fs-28 tp-text-grey-5">Data Analytics</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 tp_fade_anim" data-delay=".7" data-duration="2" data-fade-from="bottom" data-ease="bounce">
+                <div class="tp-service-ai-box mb-30">
+                    <div class="tp-service-ai-main">
+                        <div class="tp-service-ai-wrap fix p-relative">
+                            <div class="tp-service-ai-thumb">
+                                <img src="{% static 'assets/img/service/ai/three.jpg' %}" alt="AI Chatbots">
+                            </div>
+                            <div class="tp-service-ai-content-2">
+                                <span class="tp-ff-jakarta fw-700 fs-28 tp-text-grey-5">AI Chatbots</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 tp_fade_anim" data-delay=".9" data-duration="2" data-fade-from="bottom" data-ease="bounce">
+                <div class="tp-service-ai-box mb-30">
+                    <div class="tp-service-ai-main">
+                        <div class="tp-service-ai-wrap fix p-relative">
+                            <div class="tp-service-ai-thumb">
+                                <img src="{% static 'assets/img/service/ai/five.jpg' %}" alt="AI Integration">
+                            </div>
+                            <div class="tp-service-ai-content-2">
+                                <span class="tp-ff-jakarta fw-700 fs-28 tp-text-grey-5">AI Integration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
 /* Service Section Additional Styles */
