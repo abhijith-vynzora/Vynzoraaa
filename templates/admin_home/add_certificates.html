@@ -508,7 +508,6 @@
     </div>
   </div>
 </div>
-
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // Form elements
@@ -544,9 +543,12 @@
     updateCharacterCount(email, emailCount, 100);
     updateCharacterCount(designation, designationCount, 100);
 
-    // Set minimum date to today
-    const today = new Date().toISOString().split('T')[0];
-    joinDate.min = today;
+    // Date validation (Allows any date)
+    joinDate.addEventListener('change', function() {
+      if (this.value) {
+        hideError(this, dateError);
+      }
+    });
 
     // Character count functionality
     function updateCharacterCount(element, countElement, maxLength) {
@@ -635,18 +637,6 @@
       field.classList.remove('error');
       errorElement.classList.remove('show');
     }
-
-    // Date validation
-    joinDate.addEventListener('change', function() {
-      const selectedDate = new Date(this.value);
-      const today = new Date();
-      
-      if (selectedDate > today) {
-        showError(this, dateError, 'Join date cannot be in the future');
-      } else {
-        hideError(this, dateError);
-      }
-    });
 
     // File preview functionality
     function setupFilePreview() {
@@ -741,17 +731,10 @@
       if (!validateField(email, emailError, 'email')) isValid = false;
       if (!validateField(designation, designationError, 'designation')) isValid = false;
       
-      // Validate date
+      // Validate date (UPDATED: Removed future date check)
       if (!joinDate.value) {
         showError(joinDate, dateError, 'Please select a join date');
         isValid = false;
-      } else {
-        const selectedDate = new Date(joinDate.value);
-        const today = new Date();
-        if (selectedDate > today) {
-          showError(joinDate, dateError, 'Join date cannot be in the future');
-          isValid = false;
-        }
       }
       
       // Validate file
