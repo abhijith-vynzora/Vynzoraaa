@@ -903,7 +903,7 @@ function onPlayerError(event) {
                                                     </h3>
                                                     <div class="tp-service-description">
                                                         <p class="tp-ff-inter fw-400 fs-16 fs-sm-15 ls-m-2 lh-160-per tp-text-common-black-5">
-                                                            {{ service.description|truncatewords:40|linebreaks }}
+                                                            {{ service.description|truncatewords:40|safe }}
                                                         </p>
                                                     </div>
                                                 </div>
