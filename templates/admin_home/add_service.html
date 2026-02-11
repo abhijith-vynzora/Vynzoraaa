@@ -644,12 +644,12 @@
                     <span class="formset-number">{{ forloop.counter }}</span>
                     Step {{ forloop.counter }}
                   </div>
-                  <button type="button" class="btn-remove-formset" onclick="removeFormsetItem(this, 'step')">
-                    <i class="mdi mdi-delete"></i> Remove
-                  </button>
+                  {% comment %} <button type="button" class="btn-remove-formset" onclick="removeFormsetItem(this, 'step')">
+                    {% comment %} <i class="mdi mdi-delete"></i> Remove 
+                  </button> {% endcomment %}
                 </div>
                 {{ step_form.id }}
-                {% comment %} {{ step_form.DELETE }} {% endcomment %}
+                {% comment %} <div style="display:none;">{{ step_form.DELETE }}</div> {% endcomment %}
                 <div class="form-group">
                   <label class="form-label">Step Title<span class="required">*</span></label>
                   {{ step_form.title }}
@@ -666,11 +666,11 @@
               {% endfor %}
             </div>
             <button type="button" class="btn-add-formset" id="addStepBtn" onclick="addFormsetItem('step')">
-              <i class="mdi mdi-plus"></i> Add Another Step
+              {% comment %} <i class="mdi mdi-plus"></i> Add Another Step {% endcomment %}
             </button>
             <div class="formset-limit-text">
               <i class="mdi mdi-information"></i>
-              <span>Maximum 4 process steps allowed</span>
+              <span>Minimum 4 process steps required</span>
             </div>
           </div>
         </div>
