@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 <style>
+/* --- Button Styles --- */
 .tp-btn-lg.tp-bg-theme-primary:hover,
 .tp-btn-lg.tp-bg-theme-primary:hover .btn-text,
 .tp-btn-lg.tp-bg-theme-primary:hover svg path {
@@ -9,7 +10,32 @@
     fill: #ffffff !important;
 }
 
-/* Job Accordion Styles - FIXED */
+/* Navy Blue Theme Override */
+.careers-btn, .apply-btn-custom {
+    background-color: #001448 !important; /* Navy Background */
+    color: #ffffff !important;           /* White Text */
+    border-radius: 50px !important;
+    border: none !important;
+    box-shadow: 0 10px 25px rgba(0, 20, 72, 0.2) !important;
+    padding: 18px 40px !important;
+    cursor: pointer;
+}
+
+/* Hover Colors */
+.careers-btn:hover, .apply-btn-custom:hover {
+    background-color: #0a45b5 !important; /* Royal Blue */
+    color: #ffffff !important;
+    box-shadow: 0 15px 35px rgba(10, 69, 181, 0.3) !important;
+}
+
+/* Ensure ALL text and icons inside stay white */
+.careers-btn .btn-text, .careers-btn svg path,
+.apply-btn-custom .btn-text, .apply-btn-custom svg path {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+}
+
+/* --- Job Accordion Styles --- */
 .tp-job-accordion-wrapper {
    width: 100%;
    min-height: 400px;
@@ -67,28 +93,7 @@
    border-top: 1px solid rgba(17, 17, 18, 0.1);
 }
 
-.tp-job-list {
-   list-style: none;
-   padding-left: 0;
-}
-
-.tp-job-list li {
-   padding-left: 25px;
-   position: relative;
-   margin-bottom: 12px;
-   line-height: 1.6;
-}
-
-.tp-job-list li:before {
-   content: "•";
-   position: absolute;
-   left: 0;
-   color: #667eea;
-   font-size: 20px;
-   font-weight: bold;
-}
-
-/* Benefit Cards */
+/* --- Benefit Cards --- */
 .tp-benefit-card {
    padding: 30px;
    background: #fff;
@@ -106,7 +111,7 @@
    display: inline-block;
 }
 
-/* Form Styles */
+/* --- Form Styles --- */
 .form-control:focus {
    outline: none;
    border-color: #667eea !important;
@@ -141,7 +146,7 @@ input[type="file"]::-webkit-file-upload-button:hover {
    border-color: #667eea;
 }
 
-/* Responsive */
+/* --- Responsive --- */
 @media (max-width: 768px) {
    .tp-career-form-wrap {
       padding: 30px 20px !important;
@@ -157,7 +162,6 @@ input[type="file"]::-webkit-file-upload-button:hover {
 }
 </style>
 
-<!-- tp-careers-hero-area-start -->
 <div class="tp-service-hero-area tp-service-hero-spacing p-relative z-index-1">
    <span class="tp-service-hero-shape-2 p-absolute">
       <svg class="line-2" viewBox="0 0 402 339" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -203,45 +207,43 @@ input[type="file"]::-webkit-file-upload-button:hover {
       </div>
    </div>
 </div>
-<!-- tp-careers-hero-area-end -->
-
-<!-- tp-careers-culture-area-start -->
 <div class="tp-team-details-area pre-header pt-160 pb-120">
-   <div class="container-fluid container-1524">
-      <div class="row align-items-center">
-         <div class="col-lg-6">
-            <div class="tp-team-details-thumb mb-30">
-               <img class="w-100 tp-round-20" src="{% static 'assets/img/service/ai/three.jpg' %}" alt="">
-            </div>
-         </div>
-         <div class="col-lg-6">
-            <div class="tp-team-details-title-wrap ml-35 mb-40">
-               <span class="tp-ff-dm fw-500 fs-18 ls-m-4 tp-text-common-black-5 mb-10 d-inline-block">Work With Us</span>
-               <h2 class="tp-section-ai-title fs-72 fs-xl-60 fs-lg-55 fs-sm-45 fs-xs-40 fw-600 ls-m-4 tp-ff-dm mb-20 tp-text-common-black">Build Your Future With Innovation</h2>
-               <p class="tp-section-ai-para tp-ff-dm mb-35 fw-400 fs-22 ls-m-2 lh-150-per tp-text-common-black">We believe in nurturing talent and fostering creativity. Our team is our greatest asset, and we're committed to creating an environment where innovation thrives and careers flourish.</p>
-               {% comment %} <a href="#open-positions" class="tp-btn-lg tp-bg-theme-primary d-inline-block text-uppercase lh-0 tp-round-26 fs-15 ls-0 tp-btn-switch-2-animation tp-text-common-white fw-700 tp-ff-dm">
-                  <span class="d-flex align-items-center justify-content-center">
-                     <span class="btn-text">View Open Positions</span>
-                     <span class="btn-icon">
-                        <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                           <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
-                        </svg>
-                     </span>
-                     <span class="btn-icon">
-                        <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                           <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
-                        </svg>
-                     </span>
-                  </span> 
-               </a> {% endcomment %}
-            </div>
-         </div>
-      </div>
-   </div>
-</div>
-<!-- tp-careers-culture-area-end -->
+  <div class="container-fluid container-1524">
+     <div class="row align-items-center">
+        <div class="col-lg-6">
+           <div class="tp-team-details-thumb mb-30">
+              <img class="w-100 tp-round-20" src="{% static 'assets/img/service/ai/three.jpg' %}" alt="">
+           </div>
+        </div>
+        <div class="col-lg-6">
+           <div class="tp-team-details-title-wrap ml-35 mb-40">
+              <span class="tp-ff-dm fw-500 fs-18 ls-m-4 tp-text-common-black-5 mb-10 d-inline-block">Work With Us</span>
+              <h2 class="tp-section-ai-title fs-72 fs-xl-60 fs-lg-55 fs-sm-45 fs-xs-40 fw-600 ls-m-4 tp-ff-dm mb-20 tp-text-common-black">Build Your Future With Innovation</h2>
+              <p class="tp-section-ai-para tp-ff-dm mb-35 fw-400 fs-22 ls-m-2 lh-150-per tp-text-common-black">We believe in nurturing talent and fostering creativity. Our team is our greatest asset, and we're committed to creating an environment where innovation thrives and careers flourish.</p>
+              
+              <button onclick="scrollToPositions()" class="tp-btn-ai careers-btn tp-btn-switch-2-animation p-relative d-inline-block text-uppercase lh-1 fs-16 fw-700 tp-ff-dm">
+                 <span class="d-flex align-items-center justify-content-center">
+                    <span class="btn-text">View Open Positions</span>
+                    
+                    <span class="btn-icon ml-10">
+                       <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
+                       </svg>
+                    </span>
 
-<!-- tp-benefits-area-start -->
+                    <span class="btn-icon">
+                       <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
+                       </svg>
+                    </span>
+                 </span> 
+              </button>
+
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
 <div class="tp-team-area pt-60 pb-90">
    <div class="container-fluid container-1524">
       <div class="row">
@@ -255,7 +257,6 @@ input[type="file"]::-webkit-file-upload-button:hover {
       </div>
 
       <div class="row gx-30">
-         <!-- Competitive Salary -->
          <div class="col-lg-3 col-md-6">
             <div class="tp-benefit-card mb-40 text-center">
                <div class="tp-benefit-icon mb-25">
@@ -272,7 +273,6 @@ input[type="file"]::-webkit-file-upload-button:hover {
             </div>
          </div>
 
-         <!-- Remote Flexibility -->
          <div class="col-lg-3 col-md-6">
             <div class="tp-benefit-card mb-40 text-center">
                <div class="tp-benefit-icon mb-25">
@@ -289,7 +289,6 @@ input[type="file"]::-webkit-file-upload-button:hover {
             </div>
          </div>
 
-         <!-- Health & Wellness -->
          <div class="col-lg-3 col-md-6">
             <div class="tp-benefit-card mb-40 text-center">
                <div class="tp-benefit-icon mb-25">
@@ -306,7 +305,6 @@ input[type="file"]::-webkit-file-upload-button:hover {
             </div>
          </div>
 
-         <!-- Growth Opportunities -->
          <div class="col-lg-3 col-md-6">
             <div class="tp-benefit-card mb-40 text-center">
                <div class="tp-benefit-icon mb-25">
@@ -325,15 +323,12 @@ input[type="file"]::-webkit-file-upload-button:hover {
       </div>
    </div>
 </div>
-<!-- tp-benefits-area-end -->
-
-<!-- tp-careers-positions-area-start -->
-<div class="tp-awareds-area pb-90" id="open-positions">
+<div class="tp-awareds-area pb-20" id="open-positions">
    <div class="container-fluid container-1524">
       <div class="row">
          <div class="col-lg-10">
             <div class="tp-service-wd-title-wrap d-md-flex align-items-end">
-               <span class="fw-500 tp-ff-dm fs-25 tp-text-common-black mb-40">Open Positions</span>
+               <h2 class="tp-section-ai-title fs-72 fs-xl-60 fs-lg-55 fs-sm-45 fs-xs-40 fw-600 ls-m-4 tp-ff-dm tp-text-common-black mb-40">Open Positions</h2>
             </div>
          </div>
          <div class="col-lg-12">
@@ -345,13 +340,11 @@ input[type="file"]::-webkit-file-upload-button:hover {
          </div>
       </div>
 
-      <!-- Job Accordion Listings -->
       <div class="row">
          <div class="col-lg-12">
             <div class="tp-job-accordion-wrapper">
                
                {% for car in careers %}
-               <!-- FIXED: Unique IDs for each job -->
                <div class="tp-job-accordion-item mb-20">
                   <div class="tp-job-accordion-header" onclick="toggleJob('job{{ car.id }}')">
                      <div class="d-flex justify-content-between align-items-center">
@@ -370,10 +363,17 @@ input[type="file"]::-webkit-file-upload-button:hover {
                   <div class="tp-job-accordion-content" id="job{{ car.id }}" style="padding-left:20px;">
                      <div class="tp-job-details-box" >
                         <p>{{ car.job_details|safe }}</p>
-                        <!-- FIXED: Pass the correct job ID -->
-                        <button type="button" class="tp-btn-lg tp-bg-theme-primary d-inline-block text-uppercase lh-0 tp-round-26 fs-15 ls-0 tp-text-common-white fw-700 tp-ff-dm" onclick="applyForJob('{{ car.id }}', '{{ car.job_position }}')">
+                        
+                        <button type="button" class="tp-btn-ai apply-btn-custom tp-btn-switch-2-animation p-relative d-inline-block text-uppercase lh-1 fs-16 fw-700 tp-ff-dm" onclick="applyForJob('{{ car.id }}', '{{ car.job_position }}')">
                            <span class="d-flex align-items-center justify-content-center">
                               <span class="btn-text">Apply Now</span>
+                              
+                              <span class="btn-icon ml-10">
+                                 <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
+                                 </svg>
+                              </span>
+
                               <span class="btn-icon">
                                  <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
@@ -381,6 +381,7 @@ input[type="file"]::-webkit-file-upload-button:hover {
                               </span>
                            </span> 
                         </button>
+
                      </div>
                   </div>
                </div>
@@ -391,10 +392,7 @@ input[type="file"]::-webkit-file-upload-button:hover {
       </div>
    </div>
 </div>
-<!-- tp-careers-positions-area-end -->
-
-<!-- tp-application-form-area-start -->
-<div class="tp-team-area pt-60 pb-140" id="application-form">
+<div class="tp-team-area pb-140" id="application-form">
    <div class="container-fluid container-1524">
       <div class="row">
          <div class="col-lg-8 mx-auto">
@@ -403,7 +401,6 @@ input[type="file"]::-webkit-file-upload-button:hover {
                <p class="tp-section-ai-para tp-ff-dm mt-20 fw-400 fs-22 ls-m-2 lh-150-per tp-text-common-black">Fill out the form below and attach your resume. We'll get back to you soon.</p>
             </div>
 
-            <!-- Application Form -->
             <div class="tp-career-form-wrap" style="background: #f8f9fa; padding: 60px; border-radius: 20px;">
                <form action="{% url 'submit_application' %}" method="POST" enctype="multipart/form-data">
                   {% csrf_token %}
@@ -484,11 +481,13 @@ input[type="file"]::-webkit-file-upload-button:hover {
                         <button type="submit" class="tp-btn-ai tp-btn-switch-2-animation  p-relative hover-text-white d-inline-block text-uppercase tp-text-common-blacks lh-1 fs-16 fw-700 tp-ff-dm">
                            <span class="d-flex align-items-center justify-content-center">
                               <span class="btn-text">Submit Application</span>
+                              
                               <span class="btn-icon">
                                  <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
                                  </svg>
                               </span>
+
                               <span class="btn-icon">
                                  <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor" />
@@ -504,10 +503,8 @@ input[type="file"]::-webkit-file-upload-button:hover {
       </div>
    </div>
 </div>
-<!-- tp-application-form-area-end -->
-
 <script>
-// FIXED: Toggle Job Accordion with unique IDs
+// Toggle Job Accordion with unique IDs
 function toggleJob(jobId) {
    const content = document.getElementById(jobId);
    const icon = document.getElementById('icon-' + jobId);
@@ -545,7 +542,22 @@ function toggleJob(jobId) {
    }
 }
 
-// FIXED: Apply for Job - Auto-fill position and scroll to form
+// Function to scroll smoothly to the Open Positions section
+function scrollToPositions() {
+   const section = document.getElementById('open-positions');
+   if (section) {
+      const headerOffset = 120; // Adjusts for your fixed header height
+      const elementPosition = section.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+         top: offsetPosition,
+         behavior: 'smooth'
+      });
+   }
+}
+
+// Apply for Job - Auto-fill position and scroll to form
 function applyForJob(jobId, jobPosition) {
    // First, close all accordions
    document.querySelectorAll('.tp-job-accordion-content').forEach(item => {

@@ -82,6 +82,70 @@
         font-size: 14px;
     }
 }
+{% comment %} /* Hide the service cards section while keeping the HTML structure intact */
+.tp-service-ai-box-wrp {
+    display: none !important;
+} {% endcomment %}
+ 
+/* FAQ Section Large Button Styling */
+.faq-large-btn {
+    /* Shape & Size */
+    padding: 22px 50px !important; 
+    font-size: 18px !important;
+    border-radius: 60px !important;
+    
+    /* Navy Blue Theme */
+    background-color: #001448 !important; 
+    color: #ffffff !important;
+    border: none !important; 
+    
+    /* Layout */
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Space between text and icon */
+    
+    /* Effects */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease-in-out !important;
+    overflow: hidden; /* Keeps the sliding animation inside the pill shape */
+}
+
+/* Force Text & Icons to White */
+.faq-large-btn .btn-text,
+.faq-large-btn svg path {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+/* Hover Behavior: Royal Blue + Lift + Glow */
+.faq-large-btn:hover {
+    background-color: #0a45b5 !important; /* Royal Blue */
+    color: #ffffff !important;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(10, 69, 181, 0.4) !important; /* Blue Glow */
+}
+
+/* Optional: Subtle Pulse Animation */
+@keyframes btn-pulse {
+    0% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+    50% { box-shadow: 0 10px 35px rgba(0, 20, 72, 0.4); }
+    100% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+}
+
+.faq-large-btn {
+    animation: btn-pulse 3s infinite ease-in-out;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 991px) {
+    .faq-large-btn {
+        padding: 18px 40px !important; /* Slightly smaller padding */
+        font-size: 16px !important;
+        margin-bottom: 20px !important; /* Add space below button on mobile */
+        width: auto; /* Allow button to fit content, or use 100% for full width */
+    }
+}
 </style>
 
 <script>
@@ -2243,9 +2307,80 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="uncover_slice"></div>
                             </div>
                         </div>
+                    </div> 
+                    
+                    {% comment %} <div class="tp-banner-ai-thumb section-triger">
+                        <div class="box h-100 p-relative"> 
+                            <img data-speed=".8" class="img-cover myimg" src="{% static 'assets/img/banner/ai/vyn1.jpg' %}" alt="">
+                            
+                            <div class="uncover">
+                                <div class="uncover_slice"></div>
+                                <div class="uncover_slice"></div>
+                                <div class="uncover_slice"></div>
+                            </div>
+                    
+                            <div class="tp-banner-btn-pos tp_fade_anim" data-delay="0.6" data-fade-from="bottom">
+                                <a href="{% url 'contact' %}" class="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-blacks lh-1 fs-16 fw-700 tp-ff-dm" 
+                                   style="background: #ffffff; color: white; border: 2px solid #ffffff; box-shadow: 0 10px 40px rgba(0,0,0,0.4);">
+                                    <span class="d-flex align-items-center justify-content-center">
+                                        <span class="btn-text">Get in Touch</span>
+                                        <span class="btn-icon">
+                                            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                            </svg>
+                                        </span>
+                                        <span class="btn-icon">
+                                            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
+                    <style>
+                        /* Container must be relative for positioning */
+                        .p-relative {
+                            position: relative !important;
+                        }
+                    
+                        /* Button Centering & Positioning */
+                        .tp-banner-btn-pos {
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%); /* This effectively centers the element */
+                            z-index: 999; /* High z-index to sit on top of animations */
+                            pointer-events: auto; /* Ensures clickable */
+                            width: auto;
+                            text-align: center;
+                        }
+                    
+                        /* Mobile Responsiveness */
+                        @media (max-width: 768px) {
+                            .tp-banner-btn-pos {
+                                width: 100%;
+                                text-align: left;   /* keeps button left */
+                                margin-left: 0;
+                                {% comment %} padding-top:100%; 
+                                padding-right: 0;
+                            }
+                        }
+                        
+                            
+                            /* Ensure button is large enough on mobile */
+                            .tp-banner-btn-pos .tp-btn-ai {
+                                padding: 15px 30px !important;
+                                font-size: 16px !important;
+                            }
+                        }
+                    </style> {% endcomment %}
+
+
                     <!-- tp-banner-area-end -->
                     <!-- tp-service-area-start -->
+                     
                     <div class="tp-service-area pt-150 pb-170 p-relative z-index-1">
                         <img class="tp-service-ai-ring p-absolute" src="{% static 'assets/img/about/ai/ring.webp' %}" alt="">
                         <div class="container-fluid container-1524">
@@ -2259,6 +2394,21 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="col-lg-4">
                                     <div class="tp-service-ai-btn mb-80 text-lg-end tp_fade_anim" data-delay=".4" data-fade-from="bottom" data-ease="bounce">
                                         {% comment %} <a href="service-4-light.html" class="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-black-6 lh-1 fs-16 fw-700 tp-ff-dm">
+                                            <span class="d-flex align-items-center justify-content-center">
+                                                <span class="btn-text">All Services</span>
+                                                <span class="btn-icon">
+                                                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                                    </svg>
+                                                </span>
+                                                <span class="btn-icon">
+                                                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        </a> {% endcomment %}
+                                        {% comment %} <a href="{% url 'services' %}" class="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-black-6 lh-1 fs-16 fw-700 tp-ff-dm">
                                             <span class="d-flex align-items-center justify-content-center">
                                                 <span class="btn-text">All Service</span>
                                                 <span class="btn-icon">
@@ -2400,51 +2550,57 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>  
+                    
+                   
+                    
+
                     <!-- tp-service-area-end -->
                     <!-- tp-text-ai-slider-area-start -->
                     {% comment %} <div class="tp-text-ai-slider-wrap pb-50">
-                        <div class="tp-text-ai-slider-single tp-bg-common-angry">
+    
+                        <div class="tp-text-ai-slider-single tp-theme-blue-1">
                             <div class="swiper-container tp-text-ai-slider-active">
                                 <div class="swiper-wrapper slide-transtion">
                                     <div class="swiper-slide">
-                                        <div class="tp-text-ai-slider-content text-center tp-bg-common-angry">
+                                        <div class="tp-text-ai-slider-content text-center tp-theme-blue-1">
                                             <p class="mb-0 tp-ff-jakarta fw-500 fs-52 fs-md-40 ls-m-4 tp-text-common-white">AI Solutions Tailored to Your Business - Automation that Saves Time & Boosts Growth</p>
                                         </div>
                                     </div>
                                     <div class="swiper-slide">
-                                        <div class="tp-text-ai-slider-content text-center tp-bg-common-angry">
+                                        <div class="tp-text-ai-slider-content text-center tp-theme-blue-1">
                                             <p class="mb-0 tp-ff-jakarta fw-500 fs-52 fs-md-40 ls-m-4 tp-text-common-white">AI Solutions Tailored to Your Business - Automation that Saves Time & Boosts Growth</p>
                                         </div>
                                     </div>
                                     <div class="swiper-slide">
-                                        <div class="tp-text-ai-slider-content text-center tp-bg-common-angry">
+                                        <div class="tp-text-ai-slider-content text-center tp-theme-blue-1">
                                             <p class="mb-0 tp-ff-jakarta fw-500 fs-52 fs-md-40 ls-m-4 tp-text-common-white">AI Solutions Tailored to Your Business - Automation that Saves Time & Boosts Growth</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tp-text-ai-slider-single tp-text-ai-slider-single-2 tp-bg-common-black-5" dir="rtl">
+                    
+                        <div class="tp-text-ai-slider-single tp-text-ai-slider-single-2 tp-theme-blue-2" dir="rtl">
                             <div class="swiper-container tp-text-ai-slider-active">
                                 <div class="swiper-wrapper slide-transtion">
                                     <div class="swiper-slide">
-                                        <div class="tp-text-ai-slider-content text-center tp-bg-common-black-5">
+                                        <div class="tp-text-ai-slider-content text-center tp-theme-blue-2">
                                             <p class="mb-0 tp-ff-jakarta fw-500 fs-52 fs-md-40 ls-m-4 tp-text-grey-5">Natural Language AI That Understands You -</p>
                                         </div>
                                     </div>
                                     <div class="swiper-slide">
-                                        <div class="tp-text-ai-slider-content text-center tp-bg-common-black-5">
+                                        <div class="tp-text-ai-slider-content text-center tp-theme-blue-2">
                                             <p class="mb-0 tp-ff-jakarta fw-500 fs-52 fs-md-40 ls-m-4 tp-text-grey-5">Secure, Ethical & Transparent AI - Creative Meets Cognitive Technology</p>
                                         </div>
                                     </div>
                                     <div class="swiper-slide">
-                                        <div class="tp-text-ai-slider-content text-center tp-bg-common-black-5">
+                                        <div class="tp-text-ai-slider-content text-center tp-theme-blue-2">
                                             <p class="mb-0 tp-ff-jakarta fw-500 fs-52 fs-md-40 ls-m-4 tp-text-grey-5">Natural Language AI That Understands You - </p>
                                         </div>
                                     </div>
                                     <div class="swiper-slide">
-                                        <div class="tp-text-ai-slider-content text-center tp-bg-common-black-5">
+                                        <div class="tp-text-ai-slider-content text-center tp-theme-blue-2">
                                             <p class="mb-0 tp-ff-jakarta fw-500 fs-52 fs-md-40 ls-m-4 tp-text-grey-5">Secure, Ethical & Transparent AI - Creative Meets Cognitive Technology</p>
                                         </div>
                                     </div>
@@ -2452,6 +2608,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                         </div>
                     </div> {% endcomment %}
+
+
                     <!-- tp-text-ai-slider-area-end -->
                     <!-- tp-portfolio-area-start -->
                     {% comment %} <div class="tp-portfolio-area pt-155">
@@ -2679,7 +2837,9 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div> {% endcomment %}
     
+    
                 <!-- tp-portfolio-area-start -->
+                 
                  <!-- tp-portfolio-area-start -->
 <div class="tp-portfolio-area ">
     <div class="container-fluid container-1524">
@@ -2843,6 +3003,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     <!-- tp-portfolio-area-end -->
                      
+                
                     <!-- tp-pricing-area-start -->
 
                     <div class="tp-testimonial-area pt-155 tp-bg-common-white pb-120 p-relative z-index-1">
@@ -2945,6 +3106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </div>
+
 
 {% comment %} <style>
 .testimonial-bottom-quote {
@@ -3405,7 +3567,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <!-- tp-testimonial-area-end -->
                      
                     <!-- tp-faq-area-start -->
-                    <div class="tp-faq-area tp-bg-common-black-5 pt-155 pb-100 p-relative z-index-1">
+                    {% comment %} <div class="tp-faq-area tp-bg-common-black-5 pt-155 pb-100 p-relative z-index-1">
                         <img class="tp-faq-ai-noise" src="{% static 'assets/img/body/noise.webp' %}" alt="">
                         <div class="container">
                             <div class="row">
@@ -3505,6 +3667,239 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 </div>
                                             </div>
                                             
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    {% comment %} <div class="tp-faq-area tp-bg-common-black-5 pt-155 pb-100 p-relative z-index-1">
+                        <img class="tp-faq-ai-noise" src="{% static 'assets/img/body/noise.webp' %}" alt="">
+                        <div class="container">
+                            <div class="row align-items-end mb-90">
+                                <div class="col-lg-8">
+                                    <div class="tp-faq-ai-title-wrap mb-0">
+                                        <span class="text-anim tp-ff-inter fw-500 fs-18 ls-m-4 tp-text-common-white mb-10 d-inline-block">/ FAQ /</span>
+                                        <h2 class="text-anim tp-section-ai-title fs-72 fs-xl-65 fs-lg-55 fs-sm-45 fs-xs-40 fw-600 ls-m-4 tp-ff-jakarta tp-text-common-white">
+                                            Explore Answers to<br>Our Most Asked Questions
+                                        </h2>
+                                    </div>
+                                </div>
+                    
+                                <div class="col-lg-4 text-lg-end mt-40 mt-lg-0">
+                                    <div class="tp_fade_anim" data-delay=".5" data-fade-from="right" data-ease="bounce">
+                                        <a href="{% url 'contact' %}" class="tp-btn-ai faq-large-btn tp-btn-switch-2-animation p-relative d-inline-block text-uppercase lh-1 fw-700 tp-ff-dm">
+                                            <span class="d-flex align-items-center justify-content-center">
+                                                <span class="btn-text">Ask a Question</span>
+                                                <span class="btn-icon ml-10">
+                                                    <svg width="24" height="14" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tp-faq-wrap tp-faq-cst-tab-content tp-faq-ai-tab-content">
+                                        <div class="accordion mb-60" id="general_faqaccordion">
+                                            <div class="accordion-item tp_fade_anim" data-delay=".3">
+                                                <h2 class="accordion-header p-relative" id="order_one">
+                                                    <button class="tp-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#order__collapse_one" aria-expanded="true" aria-controls="order__collapse_one">
+                                                        <span class="tp-faq-ai-count">01</span>
+                                                        What services does Vynzora offer?
+                                                        <span class="accordion-btn"></span>
+                                                    </button>
+                                                </h2>
+                                                <div id="order__collapse_one" class="accordion-collapse collapse show" aria-labelledby="order_one" data-bs-parent="#general_faqaccordion">
+                                                    <div class="accordion-body tp-faq-details-para">
+                                                        <p>Vynzora provides end-to-end digital solutions including web development, digital marketing, SEO, Meta ads, Google Ads, branding, creative content, and social media management. We help businesses build a strong online presence and achieve measurable growth.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="accordion-item tp_fade_anim" data-delay=".3">
+                                                <h2 class="accordion-header p-relative" id="order_two">
+                                                    <button class="collapsed tp-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#order__collapse_two" aria-expanded="false" aria-controls="order__collapse_two">
+                                                        <span class="tp-faq-ai-count">02</span>
+                                                        How does Vynzora differ from other digital marketing agencies?
+                                                        <span class="accordion-btn"></span>
+                                                    </button>
+                                                </h2>
+                                                <div id="order__collapse_two" class="accordion-collapse collapse" aria-labelledby="order_two" data-bs-parent="#general_faqaccordion">
+                                                    <div class="accordion-body tp-faq-details-para">
+                                                        <p>We focus on performance, not promises. Every strategy we create is backed by data, creativity, and industry insights. Unlike agencies that offer generic solutions, Vynzora customizes each project to your business goals, audience behaviour, and long-term growth plan.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="accordion-item tp_fade_anim" data-delay=".3">
+                                                <h2 class="accordion-header p-relative" id="order_three">
+                                                    <button class="collapsed tp-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#order__collapse_three" aria-expanded="false" aria-controls="order__collapse_three">
+                                                        <span class="tp-faq-ai-count">03</span>
+                                                        Who are your ideal clients?
+                                                        <span class="accordion-btn"></span>
+                                                    </button>
+                                                </h2>
+                                                <div id="order__collapse_three" class="accordion-collapse collapse" aria-labelledby="order_three" data-bs-parent="#general_faqaccordion">
+                                                    <div class="accordion-body tp-faq-details-para">
+                                                        <p>Our clients include small businesses, startups, established brands, educational consultancies, boutiques, resorts, professionals, and e-commerce brands, anyone looking to grow digitally with a strong online presence.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="accordion-item tp_fade_anim" data-delay=".3">
+                                                <h2 class="accordion-header p-relative" id="order_four">
+                                                    <button class="collapsed tp-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#order__collapse_four" aria-expanded="false" aria-controls="order__collapse_four">
+                                                        <span class="tp-faq-ai-count">04</span>
+                                                        Do you offer customized marketing packages?
+                                                        <span class="accordion-btn"></span>
+                                                    </button>
+                                                </h2>
+                                                <div id="order__collapse_four" class="accordion-collapse collapse" aria-labelledby="order_four" data-bs-parent="#general_faqaccordion">
+                                                    <div class="accordion-body tp-faq-details-para">
+                                                        <p>Yes. Every business has different needs, and we tailor our packages based on your goals, budget, competition, and industry requirements.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="accordion-item tp_fade_anim" data-delay=".3">
+                                                <h2 class="accordion-header p-relative" id="order_five">
+                                                    <button class="collapsed tp-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#order__collapse_five" aria-expanded="false" aria-controls="order__collapse_five">
+                                                        <span class="tp-faq-ai-count">05</span>
+                                                        How does your onboarding process work?
+                                                        <span class="accordion-btn"></span>
+                                                    </button>
+                                                </h2>
+                                                <div id="order__collapse_five" class="accordion-collapse collapse" aria-labelledby="order_five" data-bs-parent="#general_faqaccordion">
+                                                    <div class="accordion-body tp-faq-details-para">
+                                                        <p>We begin with a consultation to understand your goals. Then we audit your digital presence, build a strategy, share a roadmap, finalize deliverables, and start execution with regular updates and reporting.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    <div class="tp-faq-area tp-bg-common-black-5 pt-155 pb-100 p-relative z-index-1">
+                        <img class="tp-faq-ai-noise" src="{% static 'assets/img/body/noise.webp' %}" alt="">
+                        <div class="container">
+                            <div class="row align-items-end mb-90">
+                                <div class="col-lg-8">
+                                    <div class="tp-faq-ai-title-wrap mb-0">
+                                        <span class="text-anim tp-ff-inter fw-500 fs-18 ls-m-4 tp-text-common-white mb-10 d-inline-block">/ FAQ /</span>
+                                        <h2 class="text-anim tp-section-ai-title fs-72 fs-xl-65 fs-lg-55 fs-sm-45 fs-xs-40 fw-600 ls-m-4 tp-ff-jakarta tp-text-common-white">
+                                            Explore Answers to<br>Our Most Asked Questions
+                                        </h2>
+                                    </div>
+                                </div>
+                    
+                                <div class="col-lg-4 text-lg-end mt-40 mt-lg-0">
+                                    <div class="tp_fade_anim" data-delay=".5" data-fade-from="right" data-ease="bounce">
+                                        <a href="{% url 'contact' %}" class="tp-btn-ai faq-large-btn tp-btn-switch-2-animation p-relative d-inline-block text-uppercase lh-1 fw-700 tp-ff-dm">
+                                            <span class="d-flex align-items-center justify-content-center">
+                                                <span class="btn-text">Ask a Question</span>
+                                                
+                                                <span class="btn-icon ml-10">
+                                                    <svg width="24" height="14" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                                    </svg>
+                                                </span>
+                    
+                                                <span class="btn-icon">
+                                                    <svg width="24" height="14" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="tp-faq-wrap tp-faq-cst-tab-content tp-faq-ai-tab-content">
+                                        <div class="accordion mb-60" id="general_faqaccordion">
+                                            <div class="accordion-item tp_fade_anim" data-delay=".3">
+                                                <h2 class="accordion-header p-relative" id="order_one">
+                                                    <button class="tp-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#order__collapse_one" aria-expanded="true" aria-controls="order__collapse_one">
+                                                        <span class="tp-faq-ai-count">01</span>
+                                                        What services does Vynzora offer?
+                                                        <span class="accordion-btn"></span>
+                                                    </button>
+                                                </h2>
+                                                <div id="order__collapse_one" class="accordion-collapse collapse show" aria-labelledby="order_one" data-bs-parent="#general_faqaccordion">
+                                                    <div class="accordion-body tp-faq-details-para">
+                                                        <p>Vynzora provides end-to-end digital solutions including web development, digital marketing, SEO, Meta ads, Google Ads, branding, creative content, and social media management. We help businesses build a strong online presence and achieve measurable growth.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="accordion-item tp_fade_anim" data-delay=".3">
+                                                <h2 class="accordion-header p-relative" id="order_two">
+                                                    <button class="collapsed tp-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#order__collapse_two" aria-expanded="false" aria-controls="order__collapse_two">
+                                                        <span class="tp-faq-ai-count">02</span>
+                                                        How does Vynzora differ from other digital marketing agencies?
+                                                        <span class="accordion-btn"></span>
+                                                    </button>
+                                                </h2>
+                                                <div id="order__collapse_two" class="accordion-collapse collapse" aria-labelledby="order_two" data-bs-parent="#general_faqaccordion">
+                                                    <div class="accordion-body tp-faq-details-para">
+                                                        <p>We focus on performance, not promises. Every strategy we create is backed by data, creativity, and industry insights. Unlike agencies that offer generic solutions, Vynzora customizes each project to your business goals, audience behaviour, and long-term growth plan.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="accordion-item tp_fade_anim" data-delay=".3">
+                                                <h2 class="accordion-header p-relative" id="order_three">
+                                                    <button class="collapsed tp-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#order__collapse_three" aria-expanded="false" aria-controls="order__collapse_three">
+                                                        <span class="tp-faq-ai-count">03</span>
+                                                        Who are your ideal clients?
+                                                        <span class="accordion-btn"></span>
+                                                    </button>
+                                                </h2>
+                                                <div id="order__collapse_three" class="accordion-collapse collapse" aria-labelledby="order_three" data-bs-parent="#general_faqaccordion">
+                                                    <div class="accordion-body tp-faq-details-para">
+                                                        <p>Our clients include small businesses, startups, established brands, educational consultancies, boutiques, resorts, professionals, and e-commerce brands, anyone looking to grow digitally with a strong online presence.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="accordion-item tp_fade_anim" data-delay=".3">
+                                                <h2 class="accordion-header p-relative" id="order_four">
+                                                    <button class="collapsed tp-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#order__collapse_four" aria-expanded="false" aria-controls="order__collapse_four">
+                                                        <span class="tp-faq-ai-count">04</span>
+                                                        Do you offer customized marketing packages?
+                                                        <span class="accordion-btn"></span>
+                                                    </button>
+                                                </h2>
+                                                <div id="order__collapse_four" class="accordion-collapse collapse" aria-labelledby="order_four" data-bs-parent="#general_faqaccordion">
+                                                    <div class="accordion-body tp-faq-details-para">
+                                                        <p>Yes. Every business has different needs, and we tailor our packages based on your goals, budget, competition, and industry requirements.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="accordion-item tp_fade_anim" data-delay=".3">
+                                                <h2 class="accordion-header p-relative" id="order_five">
+                                                    <button class="collapsed tp-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#order__collapse_five" aria-expanded="false" aria-controls="order__collapse_five">
+                                                        <span class="tp-faq-ai-count">05</span>
+                                                        How does your onboarding process work?
+                                                        <span class="accordion-btn"></span>
+                                                    </button>
+                                                </h2>
+                                                <div id="order__collapse_five" class="accordion-collapse collapse" aria-labelledby="order_five" data-bs-parent="#general_faqaccordion">
+                                                    <div class="accordion-body tp-faq-details-para">
+                                                        <p>We begin with a consultation to understand your goals. Then we audit your digital presence, build a strategy, share a roadmap, finalize deliverables, and start execution with regular updates and reporting.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -3820,11 +4215,32 @@ document.addEventListener('DOMContentLoaded', function() {
                     </h2>
                 </div>
             </div>
-            <div class="col-lg-4">
+            {% comment %} <div class="col-lg-4">
                 <div class="tp-service-ai-btn mb-40 text-lg-end tp_fade_anim" data-delay=".5" data-fade-from="top" data-ease="bounce">
                     <a href="{% url 'blogs' %}" class="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-blacks lh-1 fs-16 fw-700 tp-ff-dm">
                         <span class="d-flex align-items-center justify-content-center">
                             <span class="btn-text">See All Blog</span>
+                            <span class="btn-icon">
+                                <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                        </span>
+                    </a>
+                </div>
+            </div> {% endcomment %}
+            <div class="col-lg-4">
+                <div class="tp-service-ai-btn mb-40 text-lg-end tp_fade_anim" data-delay=".5" data-fade-from="top" data-ease="bounce">
+                    <a href="{% url 'blogs' %}" class="tp-btn-ai careers-btn tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase lh-1 fs-16 fw-700 tp-ff-dm">
+                        <span class="d-flex align-items-center justify-content-center">
+                            <span class="btn-text">See All Blog</span>
+                            
+                            <span class="btn-icon ml-10">
+                                <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+            
                             <span class="btn-icon">
                                 <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
