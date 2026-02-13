@@ -4960,15 +4960,14 @@ only screen and (min-width: 576px) and (max-width: 767px),
 }
 
 .title-slide-gradient {
-  background-image: -webkit-linear-gradient(90deg, #201b17 0%, #f96501 50%, #201b17 100%);
-  background-image: -moz-linear-gradient(90deg, #201b17 0%, #f96501 50%, #201b17 100%);
-  background-image: -ms-linear-gradient(90deg, #201b17 0%, #f96501 50%, #201b17 100%);
-  background-image: -o-linear-gradient(90deg, #201b17 0%, #f96501 50%, #201b17 100%);
-  background-image: linear-gradient(90deg, #201b17 0%, #f96501 50%, #201b17 100%);
+  background-image: -webkit-linear-gradient(90deg, #000000 0%, #0f4bf5 50%, #000000 100%);
+  background-image: -moz-linear-gradient(90deg, #000000 0%, #0f4bf5 50%, #000000 100%);
+  background-image: -ms-linear-gradient(90deg, #000000 0%, #0f4bf5 50%, #000000 100%);
+  background-image: -o-linear-gradient(90deg, #000000 0%, #0f4bf5 50%, #000000 100%);
+  background-image: linear-gradient(90deg, #000000 0%, #0f4bf5 50%, #000000 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
   -moz-animation: sliderTitle3 2s ease-in-out 1s forwards infinite alternate;
   -webkit-animation: sliderTitle3 2s ease-in-out 1s forwards infinite alternate;
   animation: sliderTitle3 2s ease-in-out 1s forwards infinite alternate;
@@ -22759,7 +22758,7 @@ only screen and (min-width: 768px) and (max-width: 991px) {
 }
 
 .tp-testimonial-it-star i {
-  color: #FF6D00;
+  color: #001448;
 }
 
 .tp-testimonial-it-ratings-wrap {
