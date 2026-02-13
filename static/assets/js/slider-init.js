@@ -45,7 +45,7 @@
 	"use strict";
 
 	// 01. tp-brand-slide-active
-	var tp_brand_slider= new Swiper(".tp-brand-slide-active", {
+	var tp_brand_slider = new Swiper(".tp-brand-slide-active", {
 		loop: true,
 		freemode: true,
 		slidesPerView: 'auto',
@@ -53,54 +53,54 @@
 		allowTouchMove: false,
 		speed: 8000,
 		autoplay: {
-		  delay: 1,
-		  disableOnInteraction: true,
+			delay: 1,
+			disableOnInteraction: true,
 		},
 	});
 
-    ////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
 	// 02. tp-text-slider-active
-    var tp_brand_slide = new Swiper(".tp-text-slider-active", {
-        loop: true,
-        freemode: true,
-        slidesPerView: 'auto',
-        spaceBetween: 0,
-        centeredSlides: true,
-        allowTouchMove: false,
-        speed: 8000,
-        autoplay: {
-            delay: 1,
-            disableOnInteraction: true,
-        },
-    });
+	var tp_brand_slide = new Swiper(".tp-text-slider-active", {
+		loop: true,
+		freemode: true,
+		slidesPerView: 'auto',
+		spaceBetween: 0,
+		centeredSlides: true,
+		allowTouchMove: false,
+		speed: 8000,
+		autoplay: {
+			delay: 1,
+			disableOnInteraction: true,
+		},
+	});
 
 
 	////////////////////////////////////////////////////
 	// 03. tp-testimonial-slider-active
-	  var gallery = new Swiper('.tp-testimonial-slider-active', {
-		  slidesPerView: 1,
-		  loop: true,
-		  autoplay: true,
-		  arrow: false,
-		  spaceBetween: 0,
-		  speed: 1000,
-		  pagination: {
-			  el: '#paginations',
-			  type: 'custom',
-			  renderCustom: function (swiper, current, total) {
-				  let zero = total > 9 ? '' : '0';
-				  let index = zero + current
-				  let all = zero + total
-				  let html = `<div class="shop-slider-pagination">
+	var gallery = new Swiper('.tp-testimonial-slider-active', {
+		slidesPerView: 1,
+		loop: true,
+		autoplay: true,
+		arrow: false,
+		spaceBetween: 0,
+		speed: 1000,
+		pagination: {
+			el: '#paginations',
+			type: 'custom',
+			renderCustom: function (swiper, current, total) {
+				let zero = total > 9 ? '' : '0';
+				let index = zero + current
+				let all = zero + total
+				let html = `<div class="shop-slider-pagination">
 								  <span>${index}</span>
 								  <span>${all}</span>
 							  </div>`;
-				  return html;
-			  }
-		  }
-  
-	  });
-  
+				return html;
+			}
+		}
+
+	});
+
 	////////////////////////////////////////////////////
 	// 04. tp-team-slider-active
 	var portfolio = new Swiper('.tp-portfolio-2-slider-active', {
@@ -176,7 +176,7 @@
 	// 06. tp-service-sa-slider
 	var slider = new Swiper('.tp-service-sa-slider', {
 		slidesPerView: 1,
-		speed:1000,
+		speed: 1000,
 		spaceBetween: 24,
 		loop: true,
 		pagination: {
@@ -208,7 +208,7 @@
 	// 07. tp-testimonial-sa-slider
 	var slider = new Swiper('.tp-testimonial-sa-slider', {
 		slidesPerView: 1,
-		speed:1000,
+		speed: 1000,
 		spaceBetween: 24,
 		loop: true,
 		pagination: {
@@ -237,11 +237,11 @@
 	////////////////////////////////////////////////////
 	// 08. tp-portfolio-showcase-slide-active
 	let t7_showcase_slide_active = new Swiper(".tp-portfolio-showcase-slide-active", {
-        spaceBetween: 80,
-        slidesPerView: 1,
-        loop: true,
+		spaceBetween: 80,
+		slidesPerView: 1,
+		loop: true,
 		spaceBetween: 24,
-        allowTouchMove: true,
+		allowTouchMove: true,
 		mousewheel: true,
 		centeredSlides: true,
 		speed: 600,
@@ -320,7 +320,7 @@
 	});
 
 	// 11. tp-text-cst-slide-active
-	var tp_brand_slider= new Swiper(".tp-text-cst-slide-active", {
+	var tp_brand_slider = new Swiper(".tp-text-cst-slide-active", {
 		loop: true,
 		freemode: true,
 		slidesPerView: 'auto',
@@ -328,8 +328,8 @@
 		allowTouchMove: false,
 		speed: 8000,
 		autoplay: {
-		  delay: 1,
-		  disableOnInteraction: true,
+			delay: 1,
+			disableOnInteraction: true,
 		},
 	});
 
@@ -337,7 +337,7 @@
 	// 12. tp-testimonial-cst-slider
 	var slider = new Swiper('.tp-testimonial-cst-slider', {
 		slidesPerView: 1,
-		speed:1000,
+		speed: 1000,
 		spaceBetween: 24,
 		loop: true,
 		pagination: {
@@ -346,28 +346,28 @@
 		},
 	});
 
-    ////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
 	// 13. tp-text-it-slider-active
-    var tp_text_slide = new Swiper(".tp-text-it-slider-active", {
-        loop: true,
-        freemode: true,
-        slidesPerView: 'auto',
-        spaceBetween: 5,
-        centeredSlides: true,
-        allowTouchMove: false,
-        speed: 8000,
-        autoplay: {
-            delay: 1,
-            disableOnInteraction: true,
-        },
-    });
+	var tp_text_slide = new Swiper(".tp-text-it-slider-active", {
+		loop: true,
+		freemode: true,
+		slidesPerView: 'auto',
+		spaceBetween: 5,
+		centeredSlides: true,
+		allowTouchMove: false,
+		speed: 8000,
+		autoplay: {
+			delay: 1,
+			disableOnInteraction: true,
+		},
+	});
 
 
 	////////////////////////////////////////////////////
 	// 14. tp-service-it-slider
 	var slider = new Swiper('.tp-service-it-slider', {
 		slidesPerView: 1,
-		speed:1000,
+		speed: 1000,
 		spaceBetween: 24,
 		loop: true,
 		pagination: {
@@ -440,7 +440,7 @@
 		},
 	});
 
-    ////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
 	// 17. tp-skill-slider-active
 	document.addEventListener("DOMContentLoaded", function () {
 		document.querySelectorAll(".tp-skill-pb-slider-active").forEach((el) => {
@@ -460,31 +460,31 @@
 		});
 	});
 
-    ////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
 	// 18. tp-text-ai-slider-active
-    var tp_brand_slide = new Swiper(".tp-text-ai-slider-active", {
-        loop: true,
-        freemode: true,
-        slidesPerView: 'auto',
-        spaceBetween: 0,
-        centeredSlides: true,
-        allowTouchMove: false,
-        speed: 8000,
-        autoplay: {
-            delay: 1,
-            disableOnInteraction: true,
-        },
-    });
+	var tp_brand_slide = new Swiper(".tp-text-ai-slider-active", {
+		loop: true,
+		freemode: true,
+		slidesPerView: 'auto',
+		spaceBetween: 0,
+		centeredSlides: true,
+		allowTouchMove: false,
+		speed: 8000,
+		autoplay: {
+			delay: 1,
+			disableOnInteraction: true,
+		},
+	});
 
 
 	////////////////////////////////////////////////////
 	// 19. tp-testimonial-ai-slide-active
 	let tp_testimonial_ai_slide_active = new Swiper(".tp-testimonial-ai-slide-active", {
-        spaceBetween: 80,
-        slidesPerView: 1,
-        loop: true,
+		spaceBetween: 80,
+		slidesPerView: 1,
+		loop: true,
 		spaceBetween: 24,
-        allowTouchMove: true,
+		allowTouchMove: true,
 		centeredSlides: true,
 		speed: 600,
 		effect: "fade",
@@ -494,30 +494,30 @@
 		},
 	});
 
-    ////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
 	// 20. tp-text-md-slider-active
 	let tp_text_md_slider_active = new Swiper(".tp-text-md-slider-active", {
-        loop: true,
-        freemode: true,
-        slidesPerView: 'auto',
-        spaceBetween: 0,
-        centeredSlides: true,
-        allowTouchMove: false,
-        speed: 12000,
-        autoplay: {
-            delay: 1,
-            disableOnInteraction: true,
-        },
+		loop: true,
+		freemode: true,
+		slidesPerView: 'auto',
+		spaceBetween: 0,
+		centeredSlides: true,
+		allowTouchMove: false,
+		speed: 12000,
+		autoplay: {
+			delay: 1,
+			disableOnInteraction: true,
+		},
 	});
 
 	////////////////////////////////////////////////////
 	// 21. tp-testimonial-md-slide-active
 	let tp_testimonial_md_slide_active = new Swiper(".tp-testimonial-md-slide-active", {
-        spaceBetween: 80,
-        slidesPerView: 1,
-        loop: true,
+		spaceBetween: 80,
+		slidesPerView: 1,
+		loop: true,
 		spaceBetween: 24,
-        allowTouchMove: true,
+		allowTouchMove: true,
 		centeredSlides: true,
 		speed: 600,
 	});
@@ -528,9 +528,9 @@
 		modules: [EffectSlicer],
 		effect: 'slicer',
 		loop: true,
-      	clickable: true,
+		clickable: true,
 		slicerEffect: {
-		  split: 5,
+			split: 5,
 		},
 		direction: 'vertical',
 		speed: 600,
@@ -538,25 +538,25 @@
 			releaseOnEdges: true,
 		},
 		navigation: {
-		  nextEl: '.tp-portfolio-slicer-button-next',
-		  prevEl: '.tp-portfolio-slicer-button-prev',
+			nextEl: '.tp-portfolio-slicer-button-next',
+			prevEl: '.tp-portfolio-slicer-button-prev',
 		},
 		pagination: {
-		  el: '.tp-portfolio-slicer-pagination',
-		clickable: true,
+			el: '.tp-portfolio-slicer-pagination',
+			clickable: true,
 		},
 	});
 
 	////////////////////////////////////////////////////
 	// 23. tp-portfolio-horizontal-active
 
-    let tp_portfolio_horizontal_active = new Swiper(".tp-portfolio-horizontal-active", {
+	let tp_portfolio_horizontal_active = new Swiper(".tp-portfolio-horizontal-active", {
 		direction: "horizontal",
 		effect: "slide",
 		autoplay: {
-			delay: 10000, 
+			delay: 10000,
 			disableOnInteraction: false
-        },
+		},
 		parallax: true,
 		speed: 1600,
 		rtl: true,
@@ -594,12 +594,12 @@
 		effect: "gl",
 		mousewheel: true,
 		navigation: {
-		  nextEl: '.tp-portfolio-mix-button-next',
-		  prevEl: '.tp-portfolio-mix-button-prev',
+			nextEl: '.tp-portfolio-mix-button-next',
+			prevEl: '.tp-portfolio-mix-button-prev',
 		},
 		pagination: {
-		  el: '.tp-portfolio-slicer-pagination',
-		   clickable: true,
+			el: '.tp-portfolio-slicer-pagination',
+			clickable: true,
 		},
 	});
 
@@ -626,14 +626,14 @@
 		spaceBetween: 0,
 		mousewheel: true,
 		navigation: {
-		  nextEl: '.tp-portfolio-mix-button-next',
-		  prevEl: '.tp-portfolio-mix-button-prev',
+			nextEl: '.tp-portfolio-mix-button-next',
+			prevEl: '.tp-portfolio-mix-button-prev',
 		},
 		pagination: {
 			el: '.tp-portfolio-creative-slider-main .swiper-pagination',
 			clickable: true,
 			renderBullet: function (index, className) {
-			return`<span class="${className}">
+				return `<span class="${className}">
 						<svg class="fp-arc-loader" width="16" height="16" viewBox="0 0 16 16">
 							<circle class="path" cx="8" cy="8" r="5.5" fill="none" transform="rotate(-90 8 8)" stroke="#000" stroke-opacity="1" stroke-width="1px"></circle> 
 							<circle cx="8" cy="8" r="3" fill="#000"></circle>
@@ -647,12 +647,13 @@
 	// 26. coverflow-slider
 
 	document.addEventListener('DOMContentLoaded', function () {
-		document.querySelectorAll('.coverflow-slider-main').forEach(( el)=>{
+		document.querySelectorAll('.coverflow-slider-main').forEach((el) => {
 			var coverflow_thumb_slider = new Swiper('.coverflow-slider-active', {
 				loop: true,
 				effect: "coverflow",
 				autoHeight: true,
-				mousewheel: true,
+				mousewheel: false,  // Disable scroll wheel
+				freeMode: false,
 				speed: 1500,
 				slidesPerView: 1,
 				spaceBetween: 0,
@@ -695,8 +696,8 @@
 					slideToClickedSlide: true,
 					speed: 1500,
 				});
-       		 	coverflow_thumb_slider.controller.control = coverflow_text_slider;
-        		coverflow_text_slider.controller.control = coverflow_thumb_slider;
+				coverflow_thumb_slider.controller.control = coverflow_text_slider;
+				coverflow_text_slider.controller.control = coverflow_thumb_slider;
 			})
 		});
 	});
@@ -753,8 +754,8 @@
 		allowTouchMove: false,
 		speed: 4000,
 		autoplay: {
-		  delay: 1,
-		  disableOnInteraction: true,
+			delay: 1,
+			disableOnInteraction: true,
 		},
 	});
 
@@ -769,8 +770,8 @@
 		allowTouchMove: false,
 		speed: 10000,
 		autoplay: {
-		  delay: 1,
-		  disableOnInteraction: true,
+			delay: 1,
+			disableOnInteraction: true,
 		},
 	});
 
@@ -801,8 +802,8 @@
 		allowTouchMove: false,
 		speed: 10000,
 		autoplay: {
-		  delay: 1,
-		  disableOnInteraction: true,
+			delay: 1,
+			disableOnInteraction: true,
 		},
 	});
 
@@ -817,8 +818,8 @@
 		allowTouchMove: false,
 		speed: 4000,
 		autoplay: {
-		  delay: 1,
-		  disableOnInteraction: true,
+			delay: 1,
+			disableOnInteraction: true,
 		},
 	});
 
@@ -833,8 +834,8 @@
 		allowTouchMove: false,
 		speed: 16000,
 		autoplay: {
-		  delay: 1,
-		  disableOnInteraction: true,
+			delay: 1,
+			disableOnInteraction: true,
 		},
 	});
 
@@ -864,7 +865,7 @@
 			draggable: true,
 			dragClass: 'al-swiper-scrollbar-drag',
 			snapOnRelease: true,
-		  },
+		},
 		breakpoints: {
 			'1200': {
 				slidesPerView: 5,
@@ -964,6 +965,6 @@
 		},
 	});
 
-})(jQuery);    
+})(jQuery);
 
 
