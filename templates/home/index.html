@@ -146,6 +146,32 @@
         width: auto; /* Allow button to fit content, or use 100% for full width */
     }
 }
+.tp-service-ai-ring {
+    position: absolute;
+    top: 30%; /* Changed from 50% to 30% to move it higher */
+    right: -15%; /* Adjusted right position */
+    transform: translateY(-50%);
+    animation: tp_animation_spin 9s linear infinite;
+    z-index: -1;
+    width: 32%;
+    pointer-events: none;
+  }
+
+  .tp-service-area {
+    position: relative;
+    overflow: hidden; /* This prevents the ring from causing a horizontal scrollbar */
+  }
+
+  /* Mobile Phones (max-width: 576px) */
+@media (max-width: 576px) {
+    .tp-service-ai-ring {
+        width: 50%;        /* Good size for mobile */
+        top: 15%;          /* Positions it near the first service item */
+        right: -15%;       /* Brings it back onto the screen */
+        opacity: 0.2;      /* Faint enough to read text over it */
+        z-index: 0;        /* Ensures it sits above the background but below text */
+    }
+}
 </style>
 
 <script>
@@ -2488,70 +2514,8 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </div> {% endcomment %}
 
-                        <div class="tp-service-ai-box-wrp pt-70">
-                            <div class="container-fluid container-1824">
-                                <div class="row gx-60">
-                                    <div class="col-lg-3 col-md-6 col-sm-6 tp_fade_anim" data-delay=".3" data-duration="2" data-fade-from="bottom" data-ease="bounce">
-                                        <div class="tp-service-ai-box mb-40">
-                                            <div class="tp-service-ai-main">
-                                                <div class="tp-service-ai-wrap fix p-relative">
-                                                    <div class="tp-service-ai-thumb">
-                                                        <img src="{% static 'assets/img/service/ai/four.jpg' %}" alt="destinations">
-                                                    </div>
-                                                    <div class="tp-service-ai-content-2">
-                                                        <h6 class="tp-ff-jakarta fw-700 fs-28 hover-text-white tp-text-grey-5">Design</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-6 col-sm-6 tp_fade_anim" data-delay=".5" data-duration="2" data-fade-from="bottom" data-ease="bounce">
-                                        <div class="tp-service-ai-box mb-40">
-                                            <div class="tp-service-ai-main">
-                                                <div class="tp-service-ai-wrap fix p-relative">
-                                                    <div class="tp-service-ai-thumb">
-                                                        <img src="{% static 'assets/img/service/ai/two.jpg' %}" alt="destinations">
-                                                    </div>
-                                                    <div class="tp-service-ai-content-2">
-                                                        <h6 class="tp-ff-jakarta fw-700 fs-28 hover-text-white tp-text-grey-5">Develop</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-6 col-sm-6 tp_fade_anim" data-delay=".7" data-duration="2" data-fade-from="bottom" data-ease="bounce">
-                                        <div class="tp-service-ai-box mb-40">
-                                            <div class="tp-service-ai-main">
-                                                <div class="tp-service-ai-wrap fix p-relative">
-                                                    <div class="tp-service-ai-thumb">
-                                                        <img src="{% static 'assets/img/service/ai/three.jpg' %}" alt="destinations">
-                                                    </div>
-                                                    <div class="tp-service-ai-content-2">
-                                                        <h6 class="tp-ff-jakarta fw-700 fs-28 hover-text-white tp-text-grey-5 ">Deliver</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-6 col-sm-6 tp_fade_anim" data-delay=".9" data-duration="2" data-fade-from="bottom" data-ease="bounce">
-                                        <div class="tp-service-ai-box mb-40">
-                                            <div class="tp-service-ai-main">
-                                                <div class="tp-service-ai-wrap fix p-relative">
-                                                    <div class="tp-service-ai-thumb">
-                                                        <img src="{% static 'assets/img/service/ai/three.jpg' %}" alt="destinations">
-                                                    </div>
-                                                    <div class="tp-service-ai-content-2">
-                                                        <h6 class="tp-ff-jakarta fw-700 fs-28 hover-text-white tp-text-grey-5">Growth</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
-                    
+                        
+                </div>
                    
                     
 
@@ -3789,7 +3753,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="tp-faq-area tp-bg-common-black-5 pt-155 pb-100 p-relative z-index-1">
                         <img class="tp-faq-ai-noise" src="{% static 'assets/img/body/noise.webp' %}" alt="">
                         <div class="container">
-                            <div class="row align-items-end mb-90">
+                            <div class="row align-items-end mb-35">
                                 <div class="col-lg-8">
                                     <div class="tp-faq-ai-title-wrap mb-0">
                                         <span class="text-anim tp-ff-inter fw-500 fs-18 ls-m-4 tp-text-common-white mb-10 d-inline-block">/ FAQ /</span>
