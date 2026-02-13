@@ -652,7 +652,7 @@
 				loop: true,
 				effect: "coverflow",
 				autoHeight: true,
-				mousewheel: false,  // Disable scroll wheel
+				mousewheel: false,
 				freeMode: false,
 				speed: 1500,
 				slidesPerView: 1,

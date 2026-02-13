@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="{% static 'assets/css/magnific-popup.css' %}">
         <link rel="stylesheet" href="{% static 'assets/css/font-awesome-pro.css' %}">
         <link rel="stylesheet" href="{% static 'assets/css/effect-slicer.css' %}">
+        {% comment %} <link rel="stylesheet" href="{% static 'assets/css/effect-slicer.css' %}?v=2"> {% endcomment %}
         <link rel="stylesheet" href="{% static 'assets/css/spacing.css' %}">
         <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
 
@@ -145,46 +146,6 @@
         width: auto; /* Allow button to fit content, or use 100% for full width */
     }
 }
-
-
-   
-
-    /* 2. CARD CONTAINER STYLING */
-    .coverflow-slider-item {
-        
-        border-radius: 30px; 
-        
-   
-
-      
-    }
-
-
-    /* Text Area Styling */
-    
-    .project-title {
-        font-size: 42px; /* Bigger title */
-        font-weight: 700;
-   
-    }
-
-    .project-subtitle {
-        font-size: 16px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: #666;
-    }
-
-   
-    
-
-    .coverflow-slider-main {
-        /* CHANGED: Removed top padding, kept bottom padding */
-        padding-top: 0; 
-        
-    }
-
-
 </style>
 
 <script>
@@ -2339,7 +2300,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <!-- tp-banner-area-start -->
                     <div class="tp-banner-ai-thumb section-triger">
                         <div class="box h-100">
-                            <img data-speed=".8" class="img-cover myimg" src="{% static 'assets/img/New/new_1.jpg' %}" alt="">
+                            <img data-speed=".8" class="img-cover myimg" src="{% static 'assets/img/service/ai/six.jpg' %}" alt="">
                             <div class="uncover">
                                 <div class="uncover_slice"></div>
                                 <div class="uncover_slice"></div>
@@ -2420,7 +2381,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <!-- tp-banner-area-end -->
                     <!-- tp-service-area-start -->
                      
-                    <div class="tp-service-area pt-150  p-relative z-index-1">
+                    <div class="tp-service-area pt-150 pb-170 p-relative z-index-1">
                         <img class="tp-service-ai-ring p-absolute" src="{% static 'assets/img/about/ai/ring.webp' %}" alt="">
                         <div class="container-fluid container-1524">
                             <div class="row align-items-end">
@@ -2878,123 +2839,174 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
                 <!-- tp-portfolio-area-start -->
-                 <div class="tp-portfolio-area pt-155">
-                     <div class="container-fluid container-1524">
-                         <div class="row">
-                             <div class="col-lg-5">
-                                 <div class="tp-portfolio-ai-subtitle">
-                                     <span class="text-anim tp-ff-inter fw-500 fs-18 ls-m-4 tp-text-common-black-5 mb-10 d-inline-block">/ Our Portfolio /</span>
-                                 </div>
-                             </div>
-                             <div class="col-lg-7">
-                                 <div class="tp-portfolio-ai-title ml-80">
-                                     <h2 class="text-anim tp-section-ai-title fs-72 fs-xl-65 fs-lg-52 fs-sm-45 fs-xs-40 ls-m-4 fw-600 tp-ff-jakarta mb-30 tp-text-common-black-6">
-                                         Building the <span class="title-slide-gradient"></span>
-                                         Future with Intelligent Services
-                                     </h2>
-                                     <div class="tp_fade_anim" data-delay=".4">
-                                         <p class="tp-about-ai-para tp-ff-dm mb-55 fw-400 fs-22 ls-m-2 lh-150-per tp-text-common-black-6">
-                                             From strategy to deployment, we build intelligent digital products that learn, adapt, and evolve. With creativity, engineering, and AI-driven innovation, we craft solutions that enhance user experience, streamline operations, and drive growth keeping your digital presence future-ready.
-                                         </p>
-                                     </div>
-                                     <div class="tp_fade_anim" data-delay=".6" data-fade-from="bottom" data-ease="bounce">
-                                         <a href="{% url 'portfolio' %}" class="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-blacks lh-1 fs-16 fw-700 tp-ff-dm">
-                                             <span class="d-flex align-items-center justify-content-center">
-                                                 <span class="btn-text">See All Projects</span>
-                                                 <span class="btn-icon">
-                                                     <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                         <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
-                                                     </svg>
-                                                 </span>
-                                                 <span class="btn-icon">
-                                                     <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                         <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
-                                                     </svg>
-                                                 </span>
-                                             </span>
-                                         </a>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
                  
-                     <!-- Portfolio Coverflow Slider -->
-                     <div class="coverflow-slider-main tp-portfolio-coverflow-main fix" style="background: #fff; position: relative;">
-
-                        <div class="coverflow-slider-wrap">
-                            <div class="swiper coverflow-slider-active">
-                                <div class="swiper-wrapper">
-                                    {% for project in projects %}
-                                    <div class="swiper-slide custom-slide-width">
-                                        <div class="coverflow-slider-item">
-                                            {% if project.project_image %}
-                                            <img src="{{ project.project_image.url }}" alt="{{ project.project_name }}">
-                                            {% else %}
-                                            <img src="https://placehold.co/800x600?text=No+Image" alt="No Image">
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    {% empty %}
-                                    <div class="swiper-slide custom-slide-width">
-                                        <div class="coverflow-slider-item fallback-item">
-                                             <p style="color:white; font-size: 24px;">No projects found</p>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    
-                        <div class="coverflow-slider-text-wrap">
-                            <div class="swiper coverflow-slider-text-active">
-                                <div class="swiper-wrapper">
-                                    {% for project in projects %}
-                                    <div class="swiper-slide">
-                                        <div class="coverflow-slider-content text-center">
-                                            <h4 class="project-title">
-                                                <a href="{{ project.website_link|default:'#' }}" target="_blank">
-                                                    {{ project.project_name }}
-                                                </a>
-                                            </h4>
-                                            <span class="project-subtitle">View Case Study</span>
-                                        </div>
-                                    </div>
-                                    {% empty %}
-                                    <div class="swiper-slide">
-                                        <div class="coverflow-slider-content text-center">
-                                            <h4>Vynzora</h4>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    
-                        <div class="slider-navigation-container">
-                            <div class="container-fluid container-1800">
-                                <div class="slider-nav d-flex justify-content-center gap-5">
-                                    <div class="tp-portfolio-mix-button-prev nav-icon custom-nav-btn">
-                                        <i class="fa-solid fa-angle-left"></i> Prev
-                                    </div>
-                                    <div class="tp-portfolio-mix-button-next nav-icon custom-nav-btn">
-                                        Next <i class="fa-solid fa-angle-right"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    
+                 <!-- tp-portfolio-area-start -->
+<div class="tp-portfolio-area ">
+    <div class="container-fluid container-1524">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="tp-portfolio-ai-subtitle">
+                    <span class="text-anim tp-ff-inter fw-500 fs-18 ls-m-4 tp-text-common-black-5 mb-10 d-inline-block">/ Our Portfolio /</span>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="tp-portfolio-ai-title ml-80">
+                    <h2 class="text-anim tp-section-ai-title fs-72 fs-xl-65 fs-lg-52 fs-sm-45 fs-xs-40 ls-m-4 fw-600 tp-ff-jakarta mb-30 tp-text-common-black-6">
+                        Building the <span class="title-slide-gradient"></span>
+                        Future with Intelligent Services
+                    </h2>
+                    <div class="tp_fade_anim" data-delay=".4">
+                        <p class="tp-about-ai-para tp-ff-dm mb-55 fw-400 fs-22 ls-m-2 lh-150-per tp-text-common-black-6">
+                            From strategy to deployment, we build intelligent digital products that learn, adapt, and evolve. With creativity, engineering, and AI-driven innovation, we craft solutions that enhance user experience, streamline operations, and drive growth keeping your digital presence future-ready.
+                        </p>
                     </div>
-                   
-                    
-                    
-                    
+                    <div class="tp_fade_anim" data-delay=".6" data-fade-from="bottom" data-ease="bounce">
+                        <a href="{% url 'portfolio' %}" class="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-blacks lh-1 fs-16 fw-700 tp-ff-dm">
+                            <span class="d-flex align-items-center justify-content-center">
+                                <span class="btn-text">See All Projects</span>
+                                <span class="btn-icon">
+                                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                    </svg>
+                                </span>
+                                <span class="btn-icon">
+                                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                    </svg>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio Projects Section -->
+    <div class="tp-portfolio-area pt-140">
+        <div class="container-fluid container-1800">
+            <div class="row">
+                <div class="col-12">
+                    <div class="tp-portfolio-wd-wrap des-portfolio-wrap">
+                        {% for project in projects %}
+                        <div class="tp-portfolio-wd-item des-portfolio-panel p-relative not-hide-cursor mb-30" data-cursor="View<br>Demo">
+                            <a class="cursor-hide" href="{{ project.website_link }}" target="_blank">
+                                <div class="tp-portfolio-wd-thumb p-relative">
+                                    <img src="{{ project.project_image.url }}" alt="{{ project.project_name }}">
+                                </div>
+                                <div class="tp-portfolio-wd-category">
+                                    <span>Web App</span>
+                                    <span>Technology</span>
+                                </div>
+                                <div class="tp-portfolio-wd-category portfolio-meta">
+                                    <span>{{ project.created_date|date:"Y" }}</span>
+                                </div>
+                            </a>
+                            <div class="tp-portfolio-wd-content">
+                                <h2 class="tp-ff-teko tp-text-common-white fs-100 fs-lg-70 fs-md-50 fs-xs-40 lh-1 fw-500">
+                                    <a href="{{ project.website_link }}" target="_blank">{{ project.project_name }}</a>
+                                </h2>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <p class="text-center tp-text-common-black-6">No projects available</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- tp-portfolio-area-end -->
+                {% comment %} <div class="tp-portfolio-area pt-140">
+                    <div class="container-fluid container-1800">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="tp-portfolio-wd-wrap des-portfolio-wrap">
+                                    <div class="tp-portfolio-wd-item des-portfolio-panel p-relative not-hide-cursor mb-30" data-cursor="View<br>Demo">
+                                        <a class="cursor-hide" href="portfolio-details-gallery-light.html">
+                                            <div class="tp-portfolio-wd-thumb p-relative">
+                                            <img src="assets/img/portfolio/wd/thumb.jpg" alt="">
+                                            </div>
+                                            <div class="tp-portfolio-wd-category">
+                                            <span>Research</span>
+                                            <span>Development</span>
+                                            </div>
+                                            <div class="tp-portfolio-wd-category portfolio-meta">
+                                            <span>2025</span>
+                                            </div>
+                                        </a>
+                                        <div class="tp-portfolio-wd-content">
+                                            <h2 class="tp-ff-teko tp-text-common-white fs-100 fs-lg-70 fs-md-50 fs-xs-40 lh-1 fw-500"><a href="portfolio-details-gallery-light.html">Polygona Arct Design</a></h2>
+                                        </div>
+                                    </div>
+                                    <div class="tp-portfolio-wd-item des-portfolio-panel p-relative not-hide-cursor mb-30" data-cursor="View<br>Demo">
+                                        <a class="cursor-hide" href="portfolio-details-gallery-light.html">
+                                            <div class="tp-portfolio-wd-thumb p-relative">
+                                                <img src="assets/img/portfolio/wd/thumb-2.jpg" alt="">
+                                            </div>
+                                            <div class="tp-portfolio-wd-category">
+                                                <span>Research</span>
+                                                <span>Development</span>
+                                            </div>
+                                            <div class="tp-portfolio-wd-category portfolio-meta">
+                                                <span>2025</span>
+                                            </div>
+                                        </a>
+                                        <div class="tp-portfolio-wd-content">
+                                            <h2 class="tp-ff-teko tp-text-common-white fs-100 fs-lg-70 fs-md-50 fs-xs-40 lh-1 fw-500"><a href="portfolio-details-gallery-light.html">Epic Strategy App</a></h2>
+                                        </div>
+                                    </div>
+                                    <div class="tp-portfolio-wd-item des-portfolio-panel p-relative not-hide-cursor mb-30" data-cursor="View<br>Demo">
+                                        <a class="cursor-hide" href="portfolio-details-gallery-light.html">
+                                            <div class="tp-portfolio-wd-thumb p-relative">
+                                                <img src="assets/img/portfolio/wd/thumb-3.jpg" alt="">
+                                            </div>
+                                            <div class="tp-portfolio-wd-category">
+                                                <span>Research</span>
+                                                <span>Development</span>
+                                            </div>
+                                            <div class="tp-portfolio-wd-category portfolio-meta">
+                                                <span>2025</span>
+                                            </div>
+                                        </a>
+                                        <div class="tp-portfolio-wd-content">
+                                            <h2 class="tp-ff-teko tp-text-common-white fs-100 fs-lg-70 fs-md-50 fs-xs-40 lh-1 fw-500"><a href="portfolio-details-gallery-light.html">Making Brands Shine</a></h2>
+                                        </div>
+                                    </div>
+                                    <div class="tp-portfolio-wd-item des-portfolio-panel p-relative not-hide-cursor mb-30" data-cursor="View<br>Demo">
+                                        <a class="cursor-hide" href="portfolio-details-gallery-light.html">
+                                            <div class="tp-portfolio-wd-thumb p-relative">
+                                                <img src="assets/img/portfolio/wd/thumb-4.jpg" alt="">
+                                            </div>
+                                            <div class="tp-portfolio-wd-category">
+                                                <span>Research</span>
+                                                <span>Development</span>
+                                            </div>
+                                            <div class="tp-portfolio-wd-category portfolio-meta">
+                                                <span>2025</span>
+                                            </div>
+                                        </a>
+                                        <div class="tp-portfolio-wd-content">
+                                            <h2 class="ttp-ff-teko tp-text-common-white fs-100 fs-lg-70 fs-md-50 fs-xs-40 lh-1 fw-500"><a href="portfolio-details-gallery-light.html">Creating Impact Online</a></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+</div> {% endcomment %}
+
                     <!-- tp-portfolio-area-end -->
                      
                 
                     <!-- tp-pricing-area-start -->
 
-                    <div class="tp-testimonial-area pt-100 tp-bg-common-white pb-120 p-relative z-index-1">
+                    <div class="tp-testimonial-area pt-155 tp-bg-common-white pb-120 p-relative z-index-1">
     <img class="tp-testimonial-ai-shape p-absolute" src="{% static 'assets/img/pricing/shape.webp' %}" alt="">
     <div class="container-fluid container-1524">
         <div class="row align-items-end mb-35">
@@ -5131,8 +5143,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 
     
-    
-
+        
         <!-- JS here -->
     <script src="{% static 'assets/js/vendor/jquery.js' %}"></script>
     <script src="{% static 'assets/js/bootstrap-bundle.js' %}"></script>
