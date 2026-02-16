@@ -303,7 +303,11 @@
             bottom: -40px;
         }
     }
+
+    
+    
 </style>
+
 
 <script>
 // Simple Toast Function
@@ -379,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="text-reveal text-fill">VYNZORA</span>
                         <span class="text-shadow">VYNZORA</span>
                     </h1>
-                    <p class="preloader-loading">loading... <span id="loader-percent">0</span>%</p>
+                    <p class="preloader-loading">LOADING... <span id="loader-percent">0</span>%</p>
                 </div>
             </div>
         </div>
@@ -5252,114 +5256,104 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+(function () {
+    const percentEl = document.getElementById("loader-percent");
+    const fillEl = document.querySelector(".text-reveal"); // make sure this matches your HTML
+    const preloader = document.getElementById("preloader");
 
-    (function () {
-        const percentEl = document.getElementById("loader-percent");
-        const fillEl = document.querySelector(".text-fill");
-        const preloader = document.getElementById("preloader");
-    
-        if (!preloader) return;
-        if (!percentEl || !fillEl) {
-            preloader.style.display = "none";
-            return;
+    if (!preloader) return;
+    if (!percentEl || !fillEl) {
+        preloader.style.display = "none";
+        return;
+    }
+
+    let progress = 0;
+    let offset = 0;
+    let animationFrameId;
+    let isComplete = false;
+
+    // --- CONFIGURATION ---
+    const LOADING_SPEED = 2.5;  // Loading speed
+    const WAVE_SPEED = 0.03;    // Wave movement speed
+    const SLIDE_SPEED = 800;    // Must match CSS fade duration
+
+    function createLiquidClip(progress, offset) {
+        if (progress >= 100) {
+            return 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
         }
-    
-        let progress = 0;
-        let offset = 0;
-        let animationFrameId;
-        let isComplete = false;
-    
-        // CONFIGURATION
-        const LOADING_SPEED = 1.0; 
-        const WAVE_SPEED = 0.03; 
-    
-        function createLiquidClip(progress, offset) {
-            if (progress >= 100) {
-                return 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
-            }
-    
-            const waveHeight = 100 - progress;
-            
-            let points = [];
-    
-            // 🌊 BOUNCY CURVY WAVE MATH
-            for (let x = 0; x <= 100; x += 2) {
-                let w1 = Math.sin((x * 0.06) + offset) * 10; 
-                let w2 = Math.sin((x * 0.12) + (offset * 2.0)) * 5; 
-                let y = waveHeight + w1 + w2;
-                points.push(`${x}% ${y}%`);
-            }
-    
-            return `polygon(
-                0% 100%, 
-                ${points.join(",")}, 
-                100% 100%
-            )`;
+
+        const waveHeight = 100 - progress;
+        let points = [];
+
+        for (let x = 0; x <= 100; x += 2) {
+            let w1 = Math.sin((x * 0.06) + offset) * 8;
+            let w2 = Math.sin((x * 0.12) + (offset * 2.0)) * 4;
+            let y = waveHeight + w1 + w2;
+            points.push(`${x}% ${y}%`);
         }
-    
-        function animate() {
-            offset += WAVE_SPEED;
-    
-            fillEl.style.clipPath = createLiquidClip(progress, offset);
-    
-            // 🌑 DARKER, DEEPER BLUE THEME
-            fillEl.style.background = `
-                linear-gradient(
-                    120deg,
-                    #020617 0%,    /* Almost Black Midnight (Edge) */
-                    #172554 35%,   /* Deep Navy (Mid-tone) */
-                    #3b82f6 50%,   /* ✨ Vivid Royal Blue (Center Glow) */
-                    #172554 65%,   /* Deep Navy (Mid-tone) */
-                    #020617 100%   /* Almost Black Midnight (Edge) */
-                )
-            `;
-            
-            fillEl.style.backgroundSize = "200% auto";
-            fillEl.style.backgroundPosition = `${offset * 10}% center`; 
-            
-            fillEl.style.webkitBackgroundClip = "text";
-            fillEl.style.backgroundClip = "text";
-            fillEl.style.color = "transparent";
-    
-            // Keep animating even during the slide up
-            if (document.body.contains(preloader)) {
-                animationFrameId = requestAnimationFrame(animate);
-            }
+
+        return `polygon(0% 100%, ${points.join(",")}, 100% 100%)`;
+    }
+
+    function animate() {
+        offset += WAVE_SPEED;
+
+        fillEl.style.clipPath = createLiquidClip(progress, offset);
+
+        // --- Brighter, readable dark blue gradient ---
+        fillEl.style.background = `
+            linear-gradient(
+                120deg,
+                #1e293b 0%,     /* softened dark */
+                #2563eb 35%,    /* mid blue */
+                #60a5fa 50%,    /* bright center highlight */
+                #2563eb 65%,
+                #1e293b 100%
+            )
+        `;
+
+        fillEl.style.backgroundSize = "200% auto";
+        fillEl.style.backgroundPosition = `${offset * 10}% center`;
+        fillEl.style.webkitBackgroundClip = "text";
+        fillEl.style.backgroundClip = "text";
+        fillEl.style.color = "transparent";
+
+        if (document.body.contains(preloader)) {
+            animationFrameId = requestAnimationFrame(animate);
         }
-    
-        animate();
-    
-        function updateProgress() {
-            if (isComplete) return;
-    
-            progress += LOADING_SPEED;
-    
-            if (progress > 100) progress = 100;
-    
-            percentEl.textContent = Math.floor(progress);
-    
-            if (progress < 100) {
-                requestAnimationFrame(updateProgress);
-            } else {
-                isComplete = true;
-    
-                // Trigger the CSS Slide Up
+    }
+
+    animate();
+
+    function updateProgress() {
+        if (isComplete) return;
+
+        progress += LOADING_SPEED;
+        if (progress > 100) progress = 100;
+
+        percentEl.textContent = Math.floor(progress);
+
+        if (progress < 100) {
+            requestAnimationFrame(updateProgress);
+        } else {
+            isComplete = true;
+
+            setTimeout(() => {
+                preloader.classList.add("fade-out");
+
                 setTimeout(() => {
-                    preloader.classList.add("fade-out");
-                    
-                    // ⏱️ UPDATED TIMEOUT: Matches CSS transition (1.5s)
-                    setTimeout(() => {
-                        cancelAnimationFrame(animationFrameId);
-                        preloader.remove();
-                        document.body.classList.remove('overflow-hidden');
-                    }, 1500); 
-                }, 200);
-            }
+                    cancelAnimationFrame(animationFrameId);
+                    preloader.remove();
+                    document.body.classList.remove('overflow-hidden');
+                }, SLIDE_SPEED);
+
+            }, 150);
         }
-    
-        requestAnimationFrame(updateProgress);
-    
-    })();
+    }
+
+    requestAnimationFrame(updateProgress);
+})();
+
 </script>
 
 
