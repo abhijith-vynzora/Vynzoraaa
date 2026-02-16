@@ -496,7 +496,7 @@ Kochi, Kerala 683104, India</a>
 
                 <div class="tp-hero-area pre-header tp-hero-2-spacing fix p-relative z-index-1">
                     <!-- VIDEO SECTION USING YOUTUBE API -->
-{% if video_id %}
+{% comment %} {% if video_id %}
 <div class="tp-hero-2-video-container">
     <div class="youtube-video-wrapper">
         <div id="youtubePlayer"></div>
@@ -647,6 +647,43 @@ function onPlayerError(event) {
     </video>
 </div>
 {% endif %}
+{% endcomment %}
+
+<div class="tp-hero-2-video-container">
+    <div class="swiper static-hero-carousel h-100">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="{% static 'assets/img/New/entrance.jpg' %}" alt="Slide 1" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="swiper-slide">
+                <img src="{% static 'assets/img/New/vynzora_tree.jpeg' %}" alt="Slide 2" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            </div>
+    </div>
+</div>
+
+<style>
+/* Style to ensure carousel behaves like a background */
+.static-hero-carousel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+/* Optional: Add a dark overlay to make sure the white text is readable */
+.tp-hero-2-video-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); 
+    z-index: 0;
+}
+</style>
                
                <img class="tp-hero-2-shape-two d-none d-lg-block" data-speed="0.9"  src="{% static 'assets/img/hero/hero-2/shape.png' %}"  alt="">
                <div class="container-fluid container-1800 containers">
@@ -713,7 +750,10 @@ function onPlayerError(event) {
                      </div>
                   </div>
                </div>
-            </div>
+            </div> 
+
+
+
             <!-- hero area end -->
 
             
@@ -2049,6 +2089,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var staticHeroSwiper = new Swiper('.static-hero-carousel', {
+                slidesPerView: 1,
+                loop: true,
+                speed: 800,   // slide transition speed
+                
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                },
+        
+                // Optional navigation
+               // navigation: {
+                    //nextEl: '.swiper-button-next',
+                  //  prevEl: '.swiper-button-prev',
+               // },
+        
+                // Optional pagination dots
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                }
+            });
+        });
+        </script>
+        
         <!-- JS here -->
     <script src="{% static 'assets/js/vendor/jquery.js' %}"></script>
     <script src="{% static 'assets/js/bootstrap-bundle.js' %}"></script>
