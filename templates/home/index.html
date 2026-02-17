@@ -174,7 +174,7 @@
 }
 
 
-    /* Clean Minimal Preloader - NeoLeaf Style */
+    {% comment %} /* Clean Minimal Preloader - NeoLeaf Style */
         /* Clean Minimal Preloader - NeoLeaf Style */
         #preloader {
             position: fixed;
@@ -302,10 +302,10 @@
             font-size: 11px;
             bottom: -40px;
         }
-    }
+    } {% endcomment %}
 
-    
-    
+
+  
 </style>
 
 
@@ -351,7 +351,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
        
     </head>
-    <body class="tp-magic-cursor loaded">
+    {% comment %} <body class="tp-magic-cursor loaded"> {% endcomment %}
+        <body class="tp-magic-cursor loaded">
         <div id="toast-container" class="toast-container"></div>
         
         <div class="tp-hero-ai-body-overlay"></div>
@@ -359,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
       <![endif]-->
         <!-- loading-area-start -->
-        {% comment %} <div class="loader-wrap">
+         <div class="loader-wrap">
             <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
                 <path id="svg" d="M0,1005S175,995,500,995s500,5,500,5V0H0Z"></path>
             </svg>
@@ -374,9 +375,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span>a</span>
                 </div>
             </div>
-        </div> {% endcomment %}
+        </div> 
 
-        <div id="preloader">
+        {% comment %} <div id="preloader">
             <div class="preloader-text-container">
                 <div class="preloader-text-wrapper">
                     <h1 class="preloader-text">
@@ -386,10 +387,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p class="preloader-loading">LOADING... <span id="loader-percent">0</span>%</p>
                 </div>
             </div>
-        </div>
-
-
-
+        </div> {% endcomment %}
+        
 
         <!-- loading-area-end -->
         <!-- Begin magic cursor -->
@@ -4036,7 +4035,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                             <div class="tp_fade_anim" data-delay=".5" data-fade-from="bottom" data-ease="bounce">
                                                 <a href="{% url 'contact' %}" class="tp-btn-ai tp-btn-switch-2-animation p-relative hover-text-white d-inline-block text-uppercase tp-text-common-blacks lh-1 fs-16 fw-700 tp-ff-dm">
                                                     <span class="d-flex align-items-center justify-content-center">
-                                                        <span class="btn-text">Get Starteed Now</span>
+                                                        <span class="btn-text">Get Started Now</span>
                                                         <span class="btn-icon">
                                                             <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
@@ -5255,7 +5254,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
+{% comment %} 
 (function () {
     const percentEl = document.getElementById("loader-percent");
     const fillEl = document.querySelector(".text-reveal"); // make sure this matches your HTML
@@ -5352,8 +5351,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     requestAnimationFrame(updateProgress);
-})();
+})(); {% endcomment %}
 
+
+    
 </script>
 
 
