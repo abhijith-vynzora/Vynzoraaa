@@ -231,6 +231,13 @@
     border-color: #fff !important;
 }
 
+
+.video-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5); /* change color + opacity */
+    pointer-events: none;
+}
 </style>
 
 
@@ -565,6 +572,8 @@ transform-origin: bottom;
         padding: 0px 15px !important;
     }
 }
+
+
 
    </style>
 
@@ -2338,8 +2347,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     <div class="tp-hero-2-video-container">
         <video loop="" muted="" autoplay="" playsinline="">
-            <source src="{% static 'main_video10.mp4' %}" type="video/mp4">
+            <source src="{% static 'hero_video.mp4' %}" type="video/mp4">
         </video>
+        <div class="video-overlay"></div>
+
     </div> 
     
     {% comment %} <img class="tp-hero-2-shape-two d-none d-lg-block" data-speed="0.9" src="{% static 'assets/img/hero/hero-2/shape.png' %}" alt=""> {% endcomment %}
@@ -2391,7 +2402,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="col-lg-3">
                             <div class="tp-hero-2-impact-wrap p-relative d-flex align-items-center mb-40">
                                 <div class="shape mr-25">
-                                    <img src="{% static 'assets/img/hero/hero-2/shape-3.png' %}" alt=""> 
+                                    <img src="{% static 'assets/img/hero/hero-2/shape-3.webp' %}" alt=""> 
                                 </div>
                                 <div class="tp-hero-2-impact-text lh-1">
                                     <span class="fw-500 fs-18 tp-text-grey-2 ls-0">We Build Unique</span>
@@ -2585,16 +2596,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     
                     <!-- tp-banner-area-start -->
-                    <div class="tp-banner-ai-thumb section-triger">
-                        <div class="box h-100">
-                            <img data-speed=".8" class="img-cover myimg" src="{% static 'assets/img/New/vynzora_glass.png' %}" alt="">
-                            <div class="uncover">
-                                <div class="uncover_slice"></div>
-                                <div class="uncover_slice"></div>
-                                <div class="uncover_slice"></div>
-                            </div>
-                        </div>
-                    </div> 
                     
                     {% comment %} <div class="tp-banner-ai-thumb section-triger">
                         <div class="box h-100 p-relative"> 
@@ -2775,6 +2776,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
 <!-- tp-service-area-end -->
+<div class="tp-banner-ai-thumb section-triger">
+    <div class="box h-100">
+        <img data-speed=".8" class="img-cover myimg" src="{% static 'assets/img/New/vynzora_glass.png' %}" alt="">
+        <div class="uncover">
+            <div class="uncover_slice"></div>
+            <div class="uncover_slice"></div>
+            <div class="uncover_slice"></div>
+        </div>
+    </div>
+</div> 
+
 {% comment %} <div class="tp-service-gap-content tp-bg-common-black" style="margin-top: -200px; padding: 80px 220px;">
     <p class="fs-18 tp-text-white">
         From strategy to execution — every service we offer is designed to grow your business, strengthen your brand, and deliver measurable results.
