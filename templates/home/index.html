@@ -599,8 +599,64 @@ transform-origin: bottom;
     }
 }
 
+/* Define the continuous rotation */
+@keyframes spin-globe {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Apply the animation to the new class */
+.rotate-globe {
+    animation: spin-globe 15s linear infinite;
+}
+
+.hero-btn-wrapper .tp-btn-ai::before,
+.hero-btn-wrapper .tp-btn-ai::after {
+    display: none !important;
+}
+
+.hero-btn-wrapper .tp-btn-ai {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px) !important;
+    color: #ffffff !important;
+}
+
+.hero-btn-wrapper .tp-btn-ai:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    color: #ffffff !important;
+}
 
 
+{% comment %} /* Transparent header */
+.tp-header-ai-bg {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: none !important;
+}
+
+/* Keep transparent when sticky too */
+.header-sticky.tp-header-ai-wrap .tp-header-ai-bg {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Make nav links white */
+.tp-header-ai-bg .tp-main-menu nav ul li a {
+    color: #ffffff !important;
+}
+
+/* Make logo visible */
+.tp-header-ai-bg .tp-header-logo a {
+    color: #ffffff !important;
+} {% endcomment %}
    </style>
 
         <script>
@@ -2411,10 +2467,14 @@ for Brand Growth
                                         <span class="d-flex align-items-center justify-content-center">
                                             <span class="btn-text">View Works</span>
                                             <span class="btn-icon ml-10">
-                                                <i class="fa-regular fa-arrow-right"></i>
+                                                <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                                </svg>
                                             </span>
                                             <span class="btn-icon">
-                                                <i class="fa-regular fa-arrow-right"></i>
+                                                <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M20 6.00071C16.4166 4.67142 11.9705 2.40252 9.21414 0L11.1357 5.31243H0.688756C0.552576 5.31246 0.419232 5.35209 0.305998 5.42773C0.192725 5.50341 0.104852 5.61172 0.0527125 5.73756C0.00064999 5.86334 -0.0134432 6.0016 0.0130924 6.13511C0.0396547 6.26871 0.105682 6.39175 0.201995 6.48809C0.330914 6.61703 0.505697 6.68939 0.688048 6.6897H11.135L9.21414 12C11.9701 9.59697 16.4165 7.32913 20 6.00071Z" fill="currentColor"/>
+                                                </svg>
                                             </span>
                                         </span>
                                     </a>
@@ -2425,7 +2485,7 @@ for Brand Growth
                         <div class="col-lg-3">
                             <div class="tp-hero-2-impact-wrap p-relative d-flex align-items-center mb-40">
                                 <div class="shape mr-10">
-                                    <img src="{% static 'globe.png' %}" alt="">
+                                    <img src="{% static 'globe.png' %}" alt="Globe" class="rotate-globe">
                                 </div>
                                 <div class="tp-hero-2-impact-text lh-1">
                                     <span class="fw-500 fs-18 tp-text-grey-2 ls-0" style="color:#fff;">
@@ -2475,10 +2535,10 @@ for Brand Growth
                     <div class="tp-hero-2-combined-box mb-40">
                         <div class="tp-hero-2-customer d-flex align-items-center mb-20">
                             <img class="mr-20" src="{% static 'assets/img/hero/avatar-2.webp' %}" alt="">
-                            <p class="fw-500 fs-16 tp-text-grey-2 lh-130-per mb-0 d-inline-block">We have <b class="tp-text-common-white">24K+</b><br> 
+                            <p class="fw-500 fs-16 tp-text-common-white lh-130-per mb-0 d-inline-block">We have <b>24K+</b><br> 
                                 customers in world-wide.</p>
                         </div>
-                        <p class="fw-400 fs-20 tp-text-grey-2 mb-20">We design stunning, <b class="tp-text-common-white fw-500">Responsive,</b> and <b class="tp-text-common-white fw-500">User-friendly websites</b> tailored to your business goals. Let's create a <b class="tp-text-common-white fw-500">Digital experience</b> your audience will love.</p>
+                        <p class="fw-400 fs-20 tp-text-common-white mb-20">We design stunning, <b class="fw-500">Responsive,</b> and <b class="fw-500">User-friendly websites</b> tailored to your business goals. Let's create a <b class="fw-500">Digital experience</b> your audience will love.</p>
                         <a href="{% url 'portfolio' %}" class="tp-left-right fw-500 fs-15 tp-text-common-white text-uppercase hover-text-white">
                             <span class="mr10 td-text d-inline-block mr-5">See Our Work</span>
                             <span class="tp-arrow-angle">
@@ -2806,7 +2866,7 @@ for Brand Growth
 <!-- tp-service-area-end -->
 <div class="tp-banner-ai-thumb section-triger">
     <div class="box h-100">
-        <img data-speed=".8" class="img-cover myimg" src="{% static 'assets/img/New/vynzora_glass.png' %}" alt="">
+        <img data-speed=".8" class="img-cover myimg" src="{% static 'assets/img/New/vynzora_person.jpeg' %}" alt="AI Solutions Tailored to Your Business - Automation that Saves Time & Boosts Growth">
         <div class="uncover">
             <div class="uncover_slice"></div>
             <div class="uncover_slice"></div>
@@ -3290,9 +3350,11 @@ for Brand Growth
                 <div class="d-flex justify-content-lg-end tp_fade_anim" data-delay=".7" data-fade-from="bottom" data-ease="bounce">
                     <div class="tp-testimonial-it-ratings-wrap d-flex align-items-center mb-50">
                         <span class="mr-15">
-                            <svg width="34" height="38" viewBox="0 0 34 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M34 31.2752C30.4497 35.2736 25.2088 37.8026 19.3628 37.8026C8.66901 37.8026 0 29.3402 0 18.9013C0 8.4624 8.66901 0 19.3628 0C25.2087 0 30.4495 2.52892 33.9998 6.52719L28.4236 11.2411C26.2258 8.76607 22.9816 7.20058 19.3628 7.20058C12.7428 7.20058 7.37627 12.4392 7.37627 18.9014C7.37627 25.3636 12.7428 30.6022 19.3628 30.6022C22.9818 30.6022 26.2262 29.0366 28.4239 26.5613L34 31.2752Z" fill="#10302A"/>
-                                <path d="M19.3625 25.2024C22.927 25.2024 25.8167 22.3816 25.8167 18.902C25.8167 15.4224 22.927 12.6016 19.3625 12.6016C15.7979 12.6016 12.9082 15.4224 12.9082 18.902C12.9082 22.3816 15.7979 25.2024 19.3625 25.2024Z" fill="#EF2B10"/>
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                             </svg>
                         </span>
                         <div>
