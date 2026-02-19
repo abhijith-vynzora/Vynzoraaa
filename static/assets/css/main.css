@@ -21381,7 +21381,7 @@ only screen and (min-width: 576px) and (max-width: 767px),
 .tp-counter-item {
   width: 380px;
   height: 380px;
-  border: 1px solid var(--tp-border-1);
+  border: 2px solid var(--tp-border-1);
   border-radius: 100%;
   display: flex;
   justify-content: center;

@@ -1,15 +1,59 @@
-.tp-footer-area.tp-bg-common-black-1{background:linear-gradient(180deg,#04050a 0%,#041029 60%);color:#fff}
-.tp-footer-area.tp-bg-common-black-1 a{color:#dfe9ff}
-.tp-footer-area.tp-bg-common-black-1 .tp-footer-logo img{filter:brightness(1.06) drop-shadow(0 10px 30px rgba(0,0,0,0.6));}
-.tp-footer-area.tp-bg-common-black-1 p,.tp-footer-area.tp-bg-common-black-1 li{color:#e9eefc}
-.tp-footer-area.tp-bg-common-black-1 .tp-footer-wd-widget ul li a{color:#cfdcff}
-.tp-footer-area.tp-bg-common-black-1 .tp-footer-cst-bottom .tp-text-grey-5{color:#aeb9d4}
+.tp-footer-area.tp-bg-common-black-1 {
+    background: linear-gradient(180deg, #04050a 0%, #041029 60%);
+    color: #fff
+}
+
+.tp-footer-area.tp-bg-common-black-1 a {
+    color: #dfe9ff
+}
+
+.tp-footer-area.tp-bg-common-black-1 .tp-footer-logo img {
+    filter: brightness(1.06) drop-shadow(0 10px 30px rgba(0, 0, 0, 0.6));
+}
+
+.tp-footer-area.tp-bg-common-black-1 p,
+.tp-footer-area.tp-bg-common-black-1 li {
+    color: #e9eefc
+}
+
+.tp-footer-area.tp-bg-common-black-1 .tp-footer-wd-widget ul li a {
+    color: #cfdcff
+}
+
+.tp-footer-area.tp-bg-common-black-1 .tp-footer-cst-bottom .tp-text-grey-5 {
+    color: #aeb9d4
+}
+
 /* subtle glossy line */
-.tp-footer-area.tp-bg-common-black-1:after{content:'';position:absolute;left:0;top:0;width:100%;height:6px;background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.09),rgba(255,255,255,0.03));pointer-events:none}
+.tp-footer-area.tp-bg-common-black-1:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
+    pointer-events: none
+}
+
 /* Newsletter input visibility */
-.tp-footer-area.tp-bg-common-black-1 .tp-input{background:rgba(255,255,255,0.04) !important;border:1px solid rgba(255,255,255,0.06) !important;color:#fff !important}
-.tp-footer-area.tp-bg-common-black-1 .tp-input::placeholder{color:rgba(255,255,255,0.85) !important}
-.tp-footer-area.tp-bg-common-black-1 input.tp-input:-webkit-autofill, .tp-footer-area.tp-bg-common-black-1 input.tp-input:-internal-autofill-selected{background:rgba(255,255,255,0.04) !important; -webkit-box-shadow: 0 0 0px 1000px rgba(255,255,255,0.04) inset !important; color:#fff !important}
+.tp-footer-area.tp-bg-common-black-1 .tp-input {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    color: #fff !important
+}
+
+.tp-footer-area.tp-bg-common-black-1 .tp-input::placeholder {
+    color: rgba(255, 255, 255, 0.85) !important
+}
+
+.tp-footer-area.tp-bg-common-black-1 input.tp-input:-webkit-autofill,
+.tp-footer-area.tp-bg-common-black-1 input.tp-input:-internal-autofill-selected {
+    background: rgba(255, 255, 255, 0.04) !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.04) inset !important;
+    color: #fff !important
+}
+
 /* Add this CSS to your footer-override.css file or in the style block */
 
 /* 
