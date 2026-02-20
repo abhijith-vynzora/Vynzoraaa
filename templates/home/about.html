@@ -633,14 +633,43 @@
             <!-- tp-counter-area-end -->
 
 
-            
+            <style>
+               /* Main Banner Background - Deep Space Effect */
+.tp-banner-area {
+    background: linear-gradient(90deg, #000000 0%, #051a4d 50%, #000000 100%);
+}
+
+/* Button Gradient - Vynzora Blue */
+.tp-btn-ai {
+    background: linear-gradient(90deg, #001448 0%, #0a45b5 100%);
+    color: #ffffff !important; /* Ensure text is white */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border for depth */
+}
+
+.tp-btn-ai:hover {
+    background: linear-gradient(90deg, #0a45b5 0%, #001448 100%); /* Reverse on hover */
+}
+
+ /* Optional: Make the SVG lines glow blue */
+.tp-cta-wd-shape svg path {
+    stroke: #0d2060cc; 
+    opacity: 0.5;
+} 
+.tp-banner-cst-logo-wrap {
+   background: #0d2060cc !important;
+}
+
+.tp-banner-cst-shape{
+   filter: drop-shadow(0 0 10px rgba(0,0,0,0.6));
+}
+            </style>
 
             
 
             <!-- tp-banner-area-start -->
             <div class="tp-banner-area tp-banner-cst-spacing scale-up-img p-relative z-index-1 fix">
                <div class="tp-video-thumb">
-                  <img data-speed="0.4" class="img-cover scale-up" src="{% static 'assets/img/New/water.png' %}" alt="">
+                  <img data-speed="0.4" class="img-cover scale-up" src="{% static 'assets/img/New/water_2.jpg' %}" alt="">
                </div>
                <div class="tp-cta-wd-shape">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 705 509" fill="none">
@@ -658,7 +687,7 @@
                            </span> {% endcomment %}
                            <div class="d-flex justify-content-center">
                               <div class="tp-banner-cst-widget p-relative">
-                                 <img class="tp-banner-cst-shape" src="{% static "assets/img/banner/cst/shape.webp" %}" alt="">
+                                 <img class="tp-banner-cst-shape" src="{% static "assets/img/New/hexagon_shape.png" %}" alt="">
                                  <div class="tp-banner-cst-logo-wrap text-center">
                                     <div class="tp-banner-cst-logo">
                                        <a href="{% url 'index' %}"><img data-width="125" src="{% static 'assets/img/logo/logo-white-2.png' %}" alt=""></a>
